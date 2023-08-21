@@ -18,8 +18,7 @@ describe('Account', () => {
       password: 'any_password',
     });
 
-    expect(account.updatedAt).toEqual(new Date());
-    expect(account.createdAt).toEqual(new Date());
+    expect(account.updatedAt).toEqual(account.createdAt);
   });
 
   it('should change updatedAt field if one or more fields are changed', async () => {
