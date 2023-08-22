@@ -1,6 +1,6 @@
 import { InMemoryAccountRepository } from '@test/repositories/in-memory-accounts-repository';
 import { CreateAccountUseCase } from './create-account-usecase';
-import { PasswordDontMatchError } from './errors/password-dont-match-error';
+import { EmailInUseError } from './errors/email-in-use-error';
 
 describe('Create Account Use Case', () => {
   it('should be able to create a new account', async () => {
@@ -32,6 +32,6 @@ describe('Create Account Use Case', () => {
         password: 'any_password',
         name: 'any_name',
       });
-    }).rejects.toThrow(PasswordDontMatchError);
+    }).rejects.toThrow(EmailInUseError);
   });
 });
