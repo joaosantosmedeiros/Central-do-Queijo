@@ -8,6 +8,15 @@ import { Injectable } from '@nestjs/common';
 export class PrismaAccountRepository implements AccountRepository {
   constructor(private prismaService: PrismaService) {}
 
+  async list(): Promise<Account[]> {
+    const raw = await this.prismaService.account.findMany({});
+    const accounts = raw.map((account) =>
+      PrismaAccountMapper.toDomain(account),
+    );
+
+    return accounts;
+  }
+
   async create(account: Account): Promise<void> {
     const raw = PrismaAccountMapper.toPrisma(account);
 
