@@ -22,6 +22,13 @@ export class Account {
     >,
     id?: string,
   ) {
+    if (props.name.length < 5) {
+      throw new Error('Name length must be greater than 4 characters');
+    }
+    if (props.password.length < 8) {
+      throw new Error('Password length must be greater than 8 characters');
+    }
+
     this._id = id ?? randomUUID();
     this.props = {
       ...props,
@@ -49,6 +56,13 @@ export class Account {
   public set email(email: string) {
     this.props.email = email;
     this.props.updatedAt = new Date();
+  }
+
+  public get password(): string {
+    return this.props.password;
+  }
+  public set password(password: string) {
+    this.props.password = password;
   }
 
   public get isAdmin(): boolean {
