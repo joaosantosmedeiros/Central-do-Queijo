@@ -39,4 +39,12 @@ export class PrismaAccountRepository implements AccountRepository {
       data: raw,
     });
   }
+
+  async delete(email: string): Promise<void> {
+    await this.prismaService.account.delete({
+      where: {
+        email,
+      },
+    });
+  }
 }

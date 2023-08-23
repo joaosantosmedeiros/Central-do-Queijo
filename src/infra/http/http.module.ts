@@ -4,6 +4,7 @@ import { CreateAccountUseCase } from '@application/usecases/create-account-useca
 import { DatabaseModule } from '@infra/database/database.module';
 import { ListAllAccountsUseCase } from '@application/usecases/list-accounts-usecase';
 import { FindAccountByEmailUseCase } from '@application/usecases/find-account-by-email-usecase';
+import { DeleteAccountUseCase } from '@application/usecases/delete-account-usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -12,6 +13,7 @@ import { FindAccountByEmailUseCase } from '@application/usecases/find-account-by
     CreateAccountUseCase,
     ListAllAccountsUseCase,
     FindAccountByEmailUseCase,
+    DeleteAccountUseCase,
   ],
 })
 export class HttpModule {}

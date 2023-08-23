@@ -1,5 +1,5 @@
 import { CreateAccountUseCase } from '@application/usecases/create-account-usecase';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CreateAccountBody } from '../dto/create-account-body';
 import { PasswordDontMatchException } from '../exceptions/password-dont-match-exception';
 import { EmailInUseException } from '../exceptions/email-in-use-exception';
@@ -7,6 +7,7 @@ import { ListAllAccountsUseCase } from '@application/usecases/list-accounts-usec
 import { FindAccountByEmailUseCase } from '@application/usecases/find-account-by-email-usecase';
 import { Account } from '@application/entities/account';
 import { AccountNotFoundException } from '../exceptions/account-not-found-exception';
+import { DeleteAccountUseCase } from '@application/usecases/delete-account-usecase';
 
 @Controller('account')
 export class AccountController {
@@ -14,6 +15,7 @@ export class AccountController {
     private createAccountUseCase: CreateAccountUseCase,
     private listAllAccountsUseCase: ListAllAccountsUseCase,
     private findAccountByEmailUseCase: FindAccountByEmailUseCase,
+    private deleteAccountByEmailUseCase: DeleteAccountUseCase,
   ) {}
 
   @Get()
@@ -54,5 +56,15 @@ export class AccountController {
         throw new EmailInUseException();
       }
     }
+  }
+
+  @Delete(':email')
+  async delete(@Param('email') email: string): Promise<void> {
+    const account = await this.findAccountByEmailUseCase.execute(email);
+    if (!account) {
+      throw new AccountNotFoundException();
+    }
+
+    await this.deleteAccountByEmailUseCase.execute(email);
   }
 }
