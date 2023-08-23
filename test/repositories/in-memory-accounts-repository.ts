@@ -19,4 +19,14 @@ export class InMemoryAccountRepository implements AccountRepository {
     }
     this.accounts.push(account);
   }
+
+  async delete(email: string): Promise<void> {
+    const index = this.accounts.findIndex((acc) => acc.email === email);
+
+    if (index === -1) {
+      throw new Error('Account not found');
+    }
+
+    this.accounts.splice(index, 1);
+  }
 }
