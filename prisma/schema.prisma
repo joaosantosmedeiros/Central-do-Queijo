@@ -15,8 +15,8 @@ model Account {
   name      String
   email     String    @unique
   password  String 
-  isAdmin   Boolean
-  deletedAt DateTime?
+  userType   Int
+  isActive Boolean
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }

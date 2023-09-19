@@ -5,10 +5,10 @@ export interface AccountProps {
   name: string;
   email: string;
   password: string;
-  isAdmin: boolean;
+  userType: number;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt?: Date | null;
 }
 
 export class Account {
@@ -18,7 +18,12 @@ export class Account {
   constructor(
     props: Replace<
       AccountProps,
-      { isAdmin?: boolean; updatedAt?: Date; createdAt?: Date }
+      {
+        isActive?: boolean;
+        updatedAt?: Date;
+        createdAt?: Date;
+        userType?: number;
+      }
     >,
     id?: string,
   ) {
@@ -32,9 +37,10 @@ export class Account {
     this._id = id ?? randomUUID();
     this.props = {
       ...props,
-      isAdmin: props.isAdmin ?? false,
+      userType: props.userType ?? 1,
       updatedAt: props.updatedAt ?? new Date(),
       createdAt: props.createdAt ?? new Date(),
+      isActive: props.isActive ?? true,
     };
   }
 
@@ -65,19 +71,19 @@ export class Account {
     this.props.password = password;
   }
 
-  public get isAdmin(): boolean {
-    return this.props.isAdmin;
+  public get userType(): number {
+    return this.props.userType;
   }
-  public set isAdmin(isAdmin: boolean) {
-    this.props.isAdmin = isAdmin;
+  public set userType(userType: number) {
+    this.props.userType = userType;
     this.props.updatedAt = new Date();
   }
 
-  public get deletedAt(): Date | null | undefined {
-    return this.props.deletedAt;
+  public get isActive(): boolean {
+    return this.props.isActive;
   }
-  public set deletedAt(deletedAt: Date) {
-    this.props.deletedAt = deletedAt;
+  public set isActive(isActive: boolean) {
+    this.props.isActive = isActive;
   }
 
   public get createdAt(): Date {

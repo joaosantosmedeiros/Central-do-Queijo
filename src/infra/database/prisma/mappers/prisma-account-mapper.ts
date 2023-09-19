@@ -8,7 +8,8 @@ export class PrismaAccountMapper {
       email: account.email,
       password: account.password,
       name: account.name,
-      isAdmin: account.isAdmin,
+      userType: account.userType,
+      isActive: account.isActive,
     };
   }
 
@@ -18,10 +19,10 @@ export class PrismaAccountMapper {
         name: raw.name,
         email: raw.email,
         password: raw.password,
-        isAdmin: raw.isAdmin,
+        userType: raw.userType,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
-        deletedAt: raw.deletedAt,
+        isActive: raw.isActive,
       },
       raw.id,
     );

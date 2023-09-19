@@ -7,8 +7,8 @@ export function makeAccount(
   password = 'any_password',
   createdAt = new Date(),
   updatedAt = new Date(),
-  deletedAt = null,
-  isAdmin = false,
+  isActive = true,
+  userType = 1,
   id = randomUUID(),
 ) {
   return new Account(
@@ -16,10 +16,10 @@ export function makeAccount(
       email,
       name,
       password,
-      isAdmin,
+      isActive,
       createdAt,
       updatedAt,
-      deletedAt,
+      userType,
     },
     id,
   );
