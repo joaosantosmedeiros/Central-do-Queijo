@@ -1,4 +1,4 @@
-import { Account } from '@application/entities/account';
+import { Account } from '@application/entities/account/account';
 import { randomUUID } from 'crypto';
 
 export function makeAccount(
