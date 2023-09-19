@@ -1,4 +1,4 @@
-import { Account } from '@application/entities/account';
+import { Account } from '@application/entities/account/account';
 import { Account as RawAccount } from '@prisma/client';
 
 export class PrismaAccountMapper {

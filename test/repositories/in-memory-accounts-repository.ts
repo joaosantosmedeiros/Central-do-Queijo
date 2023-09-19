@@ -1,4 +1,4 @@
-import { Account } from '@application/entities/account';
+import { Account } from '@application/entities/account/account';
 import { AccountRepository } from '@application/repositories/account-repository';
 import { EmailInUseError } from '@application/usecases/errors/email-in-use-error';
 

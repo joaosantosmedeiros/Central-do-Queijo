@@ -5,7 +5,7 @@ import { PasswordDontMatchException } from '../exceptions/password-dont-match-ex
 import { EmailInUseException } from '../exceptions/email-in-use-exception';
 import { ListAllAccountsUseCase } from '@application/usecases/list-accounts-usecase';
 import { FindAccountByEmailUseCase } from '@application/usecases/find-account-by-email-usecase';
-import { Account } from '@application/entities/account';
+import { Account } from '@application/entities/account/account';
 import { AccountNotFoundException } from '../exceptions/account-not-found-exception';
 import { DeleteAccountUseCase } from '@application/usecases/delete-account-usecase';
 

@@ -1,4 +1,4 @@
-import { Account } from '@application/entities/account';
+import { Account } from '@application/entities/account/account';
 import { AccountRepository } from '@application/repositories/account-repository';
 import { PrismaService } from '../prisma.service';
 import { PrismaAccountMapper } from '../mappers/prisma-account-mapper';
