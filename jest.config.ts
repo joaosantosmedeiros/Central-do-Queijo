@@ -8,7 +8,12 @@ const config: Config = {
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
-  collectCoverageFrom: ['**/*.(t|j)s'],
+  collectCoverageFrom: [
+    '**/*.(t|j)s',
+    '**/*.{js,jsx}',
+    '!**/node_modules/**',
+    '!**/dist/**',
+  ],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
