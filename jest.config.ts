@@ -10,7 +10,9 @@ const config: Config = {
   },
   collectCoverageFrom: [
     '**/*.(t|j)s',
-    '**/*.{js,jsx}',
+    '!**/*.module.*',
+    '!**/*.controller.*',
+    '!**/*.service.*',
     '!**/node_modules/**',
     '!**/dist/**',
   ],
