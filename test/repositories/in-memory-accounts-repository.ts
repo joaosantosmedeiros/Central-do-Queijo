@@ -20,6 +20,27 @@ export class InMemoryAccountRepository implements AccountRepository {
     this.accounts.push(account);
   }
 
+  async update(
+    email: string,
+    props: {
+      newName?: string | undefined;
+      newEmail?: string | undefined;
+      newPassword?: string | undefined;
+    },
+  ): Promise<Account> {
+    const account = this.accounts.find((acc) => acc.email === email);
+
+    if (!account) {
+      throw new Error('Account not found');
+    }
+
+    account.email = props.newEmail ?? account.email;
+    account.password = props.newPassword ?? account.password;
+    account.name = props.newName ?? account.name;
+
+    return account;
+  }
+
   async delete(email: string): Promise<void> {
     const index = this.accounts.findIndex((acc) => acc.email === email);
 

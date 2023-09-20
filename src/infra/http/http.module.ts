@@ -5,6 +5,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { ListAllAccountsUseCase } from '@application/usecases/account-usecases/list-accounts-usecase';
 import { FindAccountByEmailUseCase } from '@application/usecases/account-usecases/find-account-by-email-usecase';
 import { DeleteAccountUseCase } from '@application/usecases/account-usecases/delete-account-usecase';
+import { UpdateAccountUseCase } from '@application/usecases/account-usecases/update-account-usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -13,6 +14,7 @@ import { DeleteAccountUseCase } from '@application/usecases/account-usecases/del
     CreateAccountUseCase,
     ListAllAccountsUseCase,
     FindAccountByEmailUseCase,
+    UpdateAccountUseCase,
     DeleteAccountUseCase,
   ],
 })

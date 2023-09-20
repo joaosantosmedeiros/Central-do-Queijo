@@ -1,5 +1,13 @@
 import { CreateAccountUseCase } from '@application/usecases/account-usecases/create-account-usecase';
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CreateAccountBody } from '../dto/create-account-body';
 import { PasswordDontMatchException } from '../exceptions/password-dont-match-exception';
 import { EmailInUseException } from '../exceptions/email-in-use-exception';
@@ -8,6 +16,8 @@ import { FindAccountByEmailUseCase } from '@application/usecases/account-usecase
 import { Account } from '@application/entities/account/account';
 import { AccountNotFoundException } from '../exceptions/account-not-found-exception';
 import { DeleteAccountUseCase } from '@application/usecases/account-usecases/delete-account-usecase';
+import { UpdateAccountUseCase } from '@application/usecases/account-usecases/update-account-usecase';
+import { UpdateAccountBody } from '../dto/update-account-body';
 
 @Controller('account')
 export class AccountController {
@@ -16,6 +26,7 @@ export class AccountController {
     private listAllAccountsUseCase: ListAllAccountsUseCase,
     private findAccountByEmailUseCase: FindAccountByEmailUseCase,
     private deleteAccountByEmailUseCase: DeleteAccountUseCase,
+    private updateAccountUseCase: UpdateAccountUseCase,
   ) {}
 
   @Get()
@@ -56,6 +67,31 @@ export class AccountController {
         throw new EmailInUseException();
       }
     }
+  }
+
+  @Put(':email')
+  async update(
+    @Param('email') email,
+    @Body() updateAccountBody: UpdateAccountBody,
+  ): Promise<Account> {
+    const account = await this.findAccountByEmailUseCase.execute(email);
+    if (!account) {
+      throw new AccountNotFoundException();
+    }
+
+    if (updateAccountBody.newEmail) {
+      const emailInUse = await this.findAccountByEmailUseCase.execute(
+        updateAccountBody.newEmail,
+      );
+      if (emailInUse) {
+        throw new EmailInUseException();
+      }
+    }
+
+    return this.updateAccountUseCase.execute({
+      email,
+      props: updateAccountBody,
+    });
   }
 
   @Delete(':email')

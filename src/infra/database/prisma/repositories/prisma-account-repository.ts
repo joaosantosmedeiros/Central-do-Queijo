@@ -47,4 +47,26 @@ export class PrismaAccountRepository implements AccountRepository {
       },
     });
   }
+
+  async update(
+    email: string,
+    props: {
+      newName?: string;
+      newEmail?: string;
+      newPassword?: string;
+    },
+  ): Promise<Account> {
+    const raw = await this.prismaService.account.update({
+      where: {
+        email,
+      },
+      data: {
+        email: props.newEmail,
+        password: props.newPassword,
+        name: props.newName,
+      },
+    });
+
+    return PrismaAccountMapper.toDomain(raw);
+  }
 }
