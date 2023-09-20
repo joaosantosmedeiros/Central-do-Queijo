@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InMemoryCategoryRepository } from '@test/repositories/in-memory-categories-repository';
 import { CategoryAlreadyExistsError } from '../errors/category-already-exists-error';
+import { CategoryRepository } from '@application/repositories/category-repository';
 
 export interface UpdateCategoryRequest {
   id: string;
@@ -9,17 +9,15 @@ export interface UpdateCategoryRequest {
 
 @Injectable()
 export class UpdateCategoryUseCase {
-  constructor(
-    private readonly inMemoryCategoryRepository: InMemoryCategoryRepository,
-  ) {}
+  constructor(private readonly categoryRepository: CategoryRepository) {}
 
   async execute(request: UpdateCategoryRequest) {
-    const category = await this.inMemoryCategoryRepository.findById(request.id);
+    const category = await this.categoryRepository.findById(request.id);
     if (!category) {
       throw new Error('Category not found.');
     }
 
-    const categoryExists = this.inMemoryCategoryRepository.categories.find(
+    const categoryExists = this.categoryRepository.categories.find(
       (ctegry) => ctegry.name === request.name,
     );
     if (categoryExists) {

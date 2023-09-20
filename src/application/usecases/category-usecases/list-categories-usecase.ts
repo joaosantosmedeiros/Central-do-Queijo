@@ -1,14 +1,12 @@
 import { Category } from '@application/entities/category/category';
+import { CategoryRepository } from '@application/repositories/category-repository';
 import { Injectable } from '@nestjs/common';
-import { InMemoryCategoryRepository } from '@test/repositories/in-memory-categories-repository';
 
 @Injectable()
 export class ListCategoriesUseCase {
-  constructor(
-    private readonly inMemoryCategoriesRepository: InMemoryCategoryRepository,
-  ) {}
+  constructor(private readonly categoryRepository: CategoryRepository) {}
 
   async execute(): Promise<Category[]> {
-    return this.inMemoryCategoriesRepository.list();
+    return this.categoryRepository.list();
   }
 }
