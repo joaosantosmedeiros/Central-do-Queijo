@@ -34,6 +34,12 @@ export class InMemoryAccountRepository implements AccountRepository {
       throw new Error('Account not found');
     }
 
+    const emailInUse = this.accounts.find((acc) => acc.email == props.newEmail);
+
+    if (emailInUse) {
+      throw new EmailInUseError();
+    }
+
     account.email = props.newEmail ?? account.email;
     account.password = props.newPassword ?? account.password;
     account.name = props.newName ?? account.name;

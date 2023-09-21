@@ -7,8 +7,6 @@ export class FindAccountByEmailUseCase {
   constructor(private accountRepository: AccountRepository) {}
 
   async execute(email: string): Promise<Account | null> {
-    const account = this.accountRepository.findByEmail(email);
-
-    return account;
+    return this.accountRepository.findByEmail(email);
   }
 }

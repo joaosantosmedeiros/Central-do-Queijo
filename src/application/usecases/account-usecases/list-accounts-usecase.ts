@@ -1,3 +1,4 @@
+import { Account } from '@application/entities/account/account';
 import { AccountRepository } from '@application/repositories/account-repository';
 import { Injectable } from '@nestjs/common';
 
@@ -5,7 +6,7 @@ import { Injectable } from '@nestjs/common';
 export class ListAllAccountsUseCase {
   constructor(private accountRepository: AccountRepository) {}
 
-  async execute() {
-    return await this.accountRepository.list();
+  async execute(): Promise<Account[]> {
+    return this.accountRepository.list();
   }
 }

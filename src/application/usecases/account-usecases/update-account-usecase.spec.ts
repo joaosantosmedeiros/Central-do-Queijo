@@ -4,6 +4,7 @@ import {
   UpdateAccountUseCase,
 } from './update-account-usecase';
 import { makeAccount } from '@test/factories/account-factory';
+import { EmailInUseError } from '../errors/email-in-use-error';
 
 describe('UpdateAccountUseCase', () => {
   it('should update an account correctly', async () => {
@@ -28,6 +29,26 @@ describe('UpdateAccountUseCase', () => {
     expect(account.email).toBe('updated_email@mail.com');
     expect(account.name).toBe('updated_name');
     expect(account.password).toBe('updated_password');
+  });
+
+  it('should throw an erorr if an used email is passed', async () => {
+    const inMemoryAccountRepository = new InMemoryAccountRepository();
+    const updateAccountUseCase = new UpdateAccountUseCase(
+      inMemoryAccountRepository,
+    );
+
+    await inMemoryAccountRepository.create(makeAccount());
+    await inMemoryAccountRepository.create(
+      makeAccount('another_mail@mail.com'),
+    );
+
+    expect(
+      async () =>
+        await updateAccountUseCase.execute({
+          email: 'another_mail@mail.com',
+          props: { newEmail: 'any_mail@mail.com' },
+        }),
+    ).rejects.toThrow(EmailInUseError);
   });
 
   it('should throw an error if an invalid email is passed', async () => {
