@@ -23,6 +23,25 @@ export class InMemoryCategoryRepository implements CategoryRepository {
     this.categories.push(newCategory);
   }
 
+  async update(id: string, name: string): Promise<Category> {
+    const category = this.categories.find((ctegory) => ctegory.id === id);
+    if (!category) {
+      throw new Error('Category not found');
+    }
+
+    const categoryExists = this.categories.find(
+      (ctegory) => ctegory.name === name,
+    );
+
+    if (categoryExists) {
+      throw new CategoryAlreadyExistsError();
+    }
+
+    category.name = name;
+
+    return category;
+  }
+
   async delete(id: string): Promise<void> {
     const index = this.categories.findIndex((acc) => acc.id === id);
 
