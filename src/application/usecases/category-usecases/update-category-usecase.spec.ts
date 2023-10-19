@@ -14,14 +14,14 @@ describe('UpdateCategoryUseCase', () => {
     await inMemoryCategoryRepository.create(makeCategory());
     const category = inMemoryCategoryRepository.categories[0];
 
-    const updatedAccount = await updateCategoryUseCase.execute({
+    const updatedCategory = await updateCategoryUseCase.execute({
       id: category.id,
       name: 'updated_name',
     });
-    const actual = updatedAccount.name;
+    const actual = updatedCategory.name;
 
     expect(actual).toBe(expected);
-    expect(updatedAccount.updatedAt == updatedAccount.createdAt).toBeFalsy();
+    expect(updatedCategory.updatedAt == updatedCategory.createdAt).toBeFalsy();
   });
 
   it('should not update an unexistent category', async () => {

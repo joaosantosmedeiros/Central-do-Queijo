@@ -3,7 +3,7 @@ import { DeleteCategoryUseCase } from './delete-category-usecase';
 import { InMemoryCategoryRepository } from '@test/repositories/in-memory-categories-repository';
 
 describe('DeleteCategoryUseCase', () => {
-  it('should delete an account correctly', async () => {
+  it('should delete an category correctly', async () => {
     const inMemoryCategoryRepository = new InMemoryCategoryRepository();
     const deleteCategoryUseCase = new DeleteCategoryUseCase(
       inMemoryCategoryRepository,
@@ -16,7 +16,7 @@ describe('DeleteCategoryUseCase', () => {
     expect(inMemoryCategoryRepository.categories.length).toBe(0);
   });
 
-  it('should not delete an unexistent account', async () => {
+  it('should not delete an unexistent category', async () => {
     const inMemoryCategoryRepository = new InMemoryCategoryRepository();
     const deleteCategoryUseCase = new DeleteCategoryUseCase(
       inMemoryCategoryRepository,
