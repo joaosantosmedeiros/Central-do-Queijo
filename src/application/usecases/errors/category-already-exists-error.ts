@@ -1,5 +1,5 @@
-export class CategoryAlreadyExistsError extends Error {
-  constructor() {
-    super('Category already exists.');
+export class EntityAlreadyExistsError extends Error {
+  constructor(entity: string) {
+    super(`${entity} already exists.`);
   }
 }

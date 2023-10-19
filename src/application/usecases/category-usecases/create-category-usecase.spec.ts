@@ -1,6 +1,6 @@
 import { InMemoryCategoryRepository } from '@test/repositories/in-memory-categories-repository';
 import { CreateCategoryUseCase } from './create-category-usecase';
-import { CategoryAlreadyExistsError } from '../errors/category-already-exists-error';
+import { EntityAlreadyExistsError } from '../errors/category-already-exists-error';
 
 describe('Create Category Use Case', () => {
   it('should be able to create a new category', async () => {
@@ -26,6 +26,6 @@ describe('Create Category Use Case', () => {
       await createCategoryUseCase.execute({
         name: 'any_name',
       });
-    }).rejects.toThrow(CategoryAlreadyExistsError);
+    }).rejects.toThrow(EntityAlreadyExistsError);
   });
 });

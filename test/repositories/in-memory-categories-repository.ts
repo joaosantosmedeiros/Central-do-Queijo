@@ -1,6 +1,6 @@
 import { Category } from '@application/entities/category/category';
 import { CategoryRepository } from '@application/repositories/category-repository';
-import { CategoryAlreadyExistsError } from '@application/usecases/errors/category-already-exists-error';
+import { EntityAlreadyExistsError } from '@application/usecases/errors/category-already-exists-error';
 
 export class InMemoryCategoryRepository implements CategoryRepository {
   public categories: Category[] = [];
@@ -23,7 +23,7 @@ export class InMemoryCategoryRepository implements CategoryRepository {
     if (
       this.categories.find((category) => category.name === newCategory.name)
     ) {
-      throw new CategoryAlreadyExistsError();
+      throw new EntityAlreadyExistsError('Category');
     }
     this.categories.push(newCategory);
   }
@@ -39,7 +39,7 @@ export class InMemoryCategoryRepository implements CategoryRepository {
     );
 
     if (categoryExists) {
-      throw new CategoryAlreadyExistsError();
+      throw new EntityAlreadyExistsError('Category');
     }
 
     category.name = name;
