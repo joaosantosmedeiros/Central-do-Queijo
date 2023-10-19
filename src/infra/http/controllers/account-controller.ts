@@ -8,14 +8,17 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import {
+  DeleteAccountUseCase,
+  FindAccountByEmailUseCase,
+  ListAllAccountsUseCase,
+  UpdateAccountUseCase,
+} from '@application/usecases/account-usecases';
+
 import { CreateAccountBody } from '../dto/create-account-body';
 import { PasswordDontMatchException } from '../exceptions/password-dont-match-exception';
 import { EmailInUseException } from '../exceptions/email-in-use-exception';
-import { ListAllAccountsUseCase } from '@application/usecases/account-usecases/list-accounts-usecase';
-import { FindAccountByEmailUseCase } from '@application/usecases/account-usecases/find-account-by-email-usecase';
 import { Account } from '@application/entities/account/account';
-import { DeleteAccountUseCase } from '@application/usecases/account-usecases/delete-account-usecase';
-import { UpdateAccountUseCase } from '@application/usecases/account-usecases/update-account-usecase';
 import { UpdateAccountBody } from '../dto/update-account-body';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 

@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AccountController } from './controllers/account-controller';
-import { CreateAccountUseCase } from '@application/usecases/account-usecases/create-account-usecase';
+import {
+  CreateAccountUseCase,
+  DeleteAccountUseCase,
+  FindAccountByEmailUseCase,
+  ListAllAccountsUseCase,
+  UpdateAccountUseCase,
+} from '@application/usecases/account-usecases';
 import { DatabaseModule } from '@infra/database/database.module';
-import { ListAllAccountsUseCase } from '@application/usecases/account-usecases/list-accounts-usecase';
-import { FindAccountByEmailUseCase } from '@application/usecases/account-usecases/find-account-by-email-usecase';
-import { DeleteAccountUseCase } from '@application/usecases/account-usecases/delete-account-usecase';
-import { UpdateAccountUseCase } from '@application/usecases/account-usecases/update-account-usecase';
 import { CategoryController } from './controllers/category-controller';
 import { CreateCategoryUseCase } from '@application/usecases/category-usecases/create-category-usecase';
 import { ListCategoriesUseCase } from '@application/usecases/category-usecases/list-categories-usecase';
