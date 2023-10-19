@@ -14,10 +14,10 @@ import { EmailInUseException } from '../exceptions/email-in-use-exception';
 import { ListAllAccountsUseCase } from '@application/usecases/account-usecases/list-accounts-usecase';
 import { FindAccountByEmailUseCase } from '@application/usecases/account-usecases/find-account-by-email-usecase';
 import { Account } from '@application/entities/account/account';
-import { AccountNotFoundException } from '../exceptions/account-not-found-exception';
 import { DeleteAccountUseCase } from '@application/usecases/account-usecases/delete-account-usecase';
 import { UpdateAccountUseCase } from '@application/usecases/account-usecases/update-account-usecase';
 import { UpdateAccountBody } from '../dto/update-account-body';
+import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 
 @Controller('account')
 export class AccountController {
@@ -41,7 +41,7 @@ export class AccountController {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
     if (!account) {
-      throw new AccountNotFoundException();
+      throw new EntityNotFoundException('Account');
     }
 
     return account;
@@ -76,7 +76,7 @@ export class AccountController {
   ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
     if (!account) {
-      throw new AccountNotFoundException();
+      throw new EntityNotFoundException('Account');
     }
 
     if (updateAccountBody.newEmail) {
@@ -98,7 +98,7 @@ export class AccountController {
   async delete(@Param('email') email: string): Promise<void> {
     const account = await this.findAccountByEmailUseCase.execute(email);
     if (!account) {
-      throw new AccountNotFoundException();
+      throw new EntityNotFoundException('Account');
     }
 
     await this.deleteAccountByEmailUseCase.execute(email);

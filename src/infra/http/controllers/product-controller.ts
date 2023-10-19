@@ -5,7 +5,7 @@ import { InvalidCategoryException } from '../exceptions/invalid-category-excepti
 import { ListProductsUseCase } from '@application/usecases/product-usecases/list-products-usecase';
 import { Product } from '@application/entities/product/product';
 import { FindProductByIdUseCase } from '@application/usecases/product-usecases/find-product-by-id-usecase';
-import { ProductNotFoundException } from '../exceptions/product-not-found-exception';
+import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 
 @Controller('product')
 export class ProductController {
@@ -25,7 +25,7 @@ export class ProductController {
     const product = await this.findProductByIdUseCase.execute(id);
 
     if (!product) {
-      throw new ProductNotFoundException();
+      throw new EntityNotFoundException('Product');
     }
 
     return product;

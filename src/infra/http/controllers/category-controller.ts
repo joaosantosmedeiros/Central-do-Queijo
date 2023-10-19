@@ -13,10 +13,10 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CategoryNotFoundException } from '../exceptions/category-not-found-exception';
 import { SaveCategoryBody } from '../dto/save-category-body';
 import { CategoryAlreadyExistsException } from '../exceptions/category-already-exists-exception';
 import { FindCategoryByNameUseCase } from '@application/usecases/category-usecases/find-category-by-name-usecase';
+import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 
 @Controller('category')
 export class CategoryController {
@@ -41,7 +41,7 @@ export class CategoryController {
     const category = await this.findCategoryByIdUseCase.execute(id);
 
     if (!category) {
-      throw new CategoryNotFoundException();
+      throw new EntityNotFoundException('Category');
     }
 
     return category;
@@ -67,7 +67,7 @@ export class CategoryController {
   ): Promise<Category> {
     const category = await this.findCategoryByIdUseCase.execute(id);
     if (!category) {
-      throw new CategoryNotFoundException();
+      throw new EntityNotFoundException('Category');
     }
 
     const categoryExists = await this.findCategoryByNameUseCase.execute(
@@ -88,7 +88,7 @@ export class CategoryController {
   async delete(@Param('id') id: string): Promise<void> {
     const category = await this.findCategoryByIdUseCase.execute(id);
     if (!category) {
-      throw new CategoryNotFoundException();
+      throw new EntityNotFoundException('Category');
     }
 
     await this.deleteCategoryByIdUseCase.execute(id);
