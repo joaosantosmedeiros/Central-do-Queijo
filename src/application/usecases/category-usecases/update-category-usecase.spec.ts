@@ -1,7 +1,7 @@
 import { InMemoryCategoryRepository } from '@test/repositories/in-memory-categories-repository';
 import { UpdateCategoryUseCase } from './update-category-usecase';
 import { makeCategory } from '@test/factories/category-factory';
-import { EntityAlreadyExistsError } from '../errors/category-already-exists-error';
+import { EntityAlreadyExistsError } from '../errors/entity-already-exists-error';
 
 describe('UpdateCategoryUseCase', () => {
   it('should update a category properly', async () => {
