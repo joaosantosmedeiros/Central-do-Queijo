@@ -13,10 +13,12 @@ import { FindCategoryByIdUseCase } from '@application/usecases/category-usecases
 import { UpdateCategoryUseCase } from '@application/usecases/category-usecases/update-category-usecase';
 import { DeleteCategoryUseCase } from '@application/usecases/category-usecases/delete-category-usecase';
 import { FindCategoryByNameUseCase } from '@application/usecases/category-usecases/find-category-by-name-usecase';
+import { ProductController } from './controllers/product-controller';
+import { CreateProductUseCase } from '@application/usecases/product-usecases/create-product-usecase';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [AccountController, CategoryController],
+  controllers: [AccountController, CategoryController, ProductController],
   providers: [
     CreateAccountUseCase,
     ListAllAccountsUseCase,
@@ -30,6 +32,8 @@ import { FindCategoryByNameUseCase } from '@application/usecases/category-usecas
     FindCategoryByNameUseCase,
     UpdateCategoryUseCase,
     DeleteCategoryUseCase,
+
+    CreateProductUseCase,
   ],
 })
 export class HttpModule {}
