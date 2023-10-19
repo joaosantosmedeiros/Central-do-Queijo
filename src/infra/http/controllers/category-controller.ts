@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -87,6 +88,7 @@ export class CategoryController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async delete(@Param('id') id: string): Promise<void> {
     const category = await this.findCategoryByIdUseCase.execute(id);
     if (!category) {

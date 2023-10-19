@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -98,6 +99,7 @@ export class AccountController {
   }
 
   @Delete(':email')
+  @HttpCode(204)
   async delete(@Param('email') email: string): Promise<void> {
     const account = await this.findAccountByEmailUseCase.execute(email);
     if (!account) {
