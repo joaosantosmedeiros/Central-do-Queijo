@@ -14,6 +14,6 @@ export class CreateAccountBody {
   confirmPassword: string;
 
   @IsNotEmpty()
-  @MinLength(3)
+  @MinLength(5)
   name: string;
 }

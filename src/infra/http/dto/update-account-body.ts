@@ -9,7 +9,7 @@ export class UpdateAccountBody {
   @IsOptional()
   newPassword: string;
 
-  @MinLength(3)
+  @MinLength(5)
   @IsOptional()
   newName: string;
 }
