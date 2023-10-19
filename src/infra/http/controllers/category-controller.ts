@@ -1,9 +1,4 @@
 import { Category } from '@application/entities/category/category';
-import { CreateCategoryUseCase } from '@application/usecases/category-usecases/create-category-usecase';
-import { DeleteCategoryUseCase } from '@application/usecases/category-usecases/delete-category-usecase';
-import { FindCategoryByIdUseCase } from '@application/usecases/category-usecases/find-category-by-id-usecase';
-import { ListCategoriesUseCase } from '@application/usecases/category-usecases/list-categories-usecase';
-import { UpdateCategoryUseCase } from '@application/usecases/category-usecases/update-category-usecase';
 import {
   Body,
   Controller,
@@ -15,8 +10,15 @@ import {
 } from '@nestjs/common';
 import { SaveCategoryBody } from '../dto/save-category-body';
 import { CategoryAlreadyExistsException } from '../exceptions/category-already-exists-exception';
-import { FindCategoryByNameUseCase } from '@application/usecases/category-usecases/find-category-by-name-usecase';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
+import {
+  CreateCategoryUseCase,
+  DeleteCategoryUseCase,
+  FindCategoryByIdUseCase,
+  FindCategoryByNameUseCase,
+  ListCategoriesUseCase,
+  UpdateCategoryUseCase,
+} from '@application/usecases/category-usecases';
 
 @Controller('category')
 export class CategoryController {

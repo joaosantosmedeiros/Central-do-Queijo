@@ -74,7 +74,7 @@ export class AccountController {
 
   @Put(':email')
   async update(
-    @Param('email') email,
+    @Param('email') email: string,
     @Body() updateAccountBody: UpdateAccountBody,
   ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
