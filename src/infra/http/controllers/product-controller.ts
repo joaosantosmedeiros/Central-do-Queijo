@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { CreateProductUseCase } from '@application/usecases/product-usecases/create-product-usecase';
 import { CreateProductBody } from '../dto/create-product-body';
 import { InvalidCategoryException } from '../exceptions/invalid-category-exception';
@@ -6,6 +14,7 @@ import { ListProductsUseCase } from '@application/usecases/product-usecases/list
 import { Product } from '@application/entities/product/product';
 import { FindProductByIdUseCase } from '@application/usecases/product-usecases/find-product-by-id-usecase';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
+import { DeleteProductUseCase } from '@application/usecases/product-usecases/delete-product-usecase';
 
 @Controller('product')
 export class ProductController {
@@ -13,6 +22,7 @@ export class ProductController {
     private createProductUseCase: CreateProductUseCase,
     private listProductsUseCase: ListProductsUseCase,
     private findProductByIdUseCase: FindProductByIdUseCase,
+    private deleteProductIdUseCase: DeleteProductUseCase,
   ) {}
 
   @Get()
@@ -45,5 +55,16 @@ export class ProductController {
         throw new InvalidCategoryException();
       }
     }
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  async delete(@Param('id') id: string): Promise<void> {
+    const category = await this.findProductByIdUseCase.execute(id);
+    if (!category) {
+      throw new EntityNotFoundException('Product');
+    }
+
+    await this.deleteProductIdUseCase.execute(id);
   }
 }
