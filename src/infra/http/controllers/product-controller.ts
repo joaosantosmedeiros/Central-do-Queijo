@@ -1,20 +1,34 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateProductUseCase } from '@application/usecases/product-usecases/create-product-usecase';
 import { CreateProductBody } from '../dto/create-product-body';
 import { InvalidCategoryException } from '../exceptions/invalid-category-exception';
 import { ListProductsUseCase } from '@application/usecases/product-usecases/list-products-usecase';
 import { Product } from '@application/entities/product/product';
+import { FindProductByIdUseCase } from '@application/usecases/product-usecases/find-product-by-id-usecase';
+import { ProductNotFoundException } from '../exceptions/product-not-found-exception';
 
 @Controller('product')
 export class ProductController {
   constructor(
     private createProductUseCase: CreateProductUseCase,
     private listProductsUseCase: ListProductsUseCase,
+    private findProductByIdUseCase: FindProductByIdUseCase,
   ) {}
 
   @Get()
   async list(): Promise<Product[]> {
     return this.listProductsUseCase.execute();
+  }
+
+  @Get(':id')
+  async findById(@Param('id') id: string): Promise<Product | null> {
+    const product = await this.findProductByIdUseCase.execute(id);
+
+    if (!product) {
+      throw new ProductNotFoundException();
+    }
+
+    return product;
   }
 
   @Post()

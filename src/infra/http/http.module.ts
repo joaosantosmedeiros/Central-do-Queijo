@@ -16,6 +16,7 @@ import { FindCategoryByNameUseCase } from '@application/usecases/category-usecas
 import { ProductController } from './controllers/product-controller';
 import { CreateProductUseCase } from '@application/usecases/product-usecases/create-product-usecase';
 import { ListProductsUseCase } from '@application/usecases/product-usecases/list-products-usecase';
+import { FindProductByIdUseCase } from '@application/usecases/product-usecases/find-product-by-id-usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -36,6 +37,7 @@ import { ListProductsUseCase } from '@application/usecases/product-usecases/list
 
     CreateProductUseCase,
     ListProductsUseCase,
+    FindProductByIdUseCase,
   ],
 })
 export class HttpModule {}
