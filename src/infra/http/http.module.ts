@@ -22,6 +22,7 @@ import { CreateProductUseCase } from '@application/usecases/product-usecases/cre
 import { ListProductsUseCase } from '@application/usecases/product-usecases/list-products-usecase';
 import { FindProductByIdUseCase } from '@application/usecases/product-usecases/find-product-by-id-usecase';
 import { DeleteProductUseCase } from '@application/usecases/product-usecases/delete-product-usecase';
+import { UpdateProductUseCase } from '@application/usecases/product-usecases/update-product-usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -43,6 +44,7 @@ import { DeleteProductUseCase } from '@application/usecases/product-usecases/del
     CreateProductUseCase,
     ListProductsUseCase,
     FindProductByIdUseCase,
+    UpdateProductUseCase,
     DeleteProductUseCase,
   ],
 })
