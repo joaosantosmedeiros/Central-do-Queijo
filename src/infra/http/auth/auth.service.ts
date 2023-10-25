@@ -1,15 +1,18 @@
-import { Account } from '@application/entities/account/account';
 import { FindAccountByEmailUseCase } from '@application/usecases/account-usecases';
-import { LoginDto } from '@infra/http/dto/login-body';
+import { LoginDto } from '@infra/http/dto/body/login-body';
+import { ReturnLoginDto } from '@infra/http/dto/return/return-login-dto';
+import { LoginPayload } from '@infra/http/dto/return/return-login-payload';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly findAccountByEmailUseCase: FindAccountByEmailUseCase,
+    private readonly jwtService: JwtService,
   ) {}
-  async login(loginDto: LoginDto): Promise<Account | null> {
+  async login(loginDto: LoginDto): Promise<ReturnLoginDto> {
     const account = await this.findAccountByEmailUseCase.execute(
       loginDto.email,
     );
@@ -23,6 +26,9 @@ export class AuthService {
       throw new HttpException('Invalid mail or password', HttpStatus.FORBIDDEN);
     }
 
-    return account;
+    return {
+      accessToken: this.jwtService.sign({ ...new LoginPayload(account) }),
+      account,
+    };
   }
 }
