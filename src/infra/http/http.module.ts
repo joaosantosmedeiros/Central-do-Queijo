@@ -25,10 +25,17 @@ import {
   ListProductsUseCase,
   UpdateProductUseCase,
 } from '@application/usecases/product-usecases';
+import { AuthController } from './controllers/auth/auth-controller';
+import { AuthService } from './controllers/auth/auth.service';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [AccountController, CategoryController, ProductController],
+  controllers: [
+    AccountController,
+    CategoryController,
+    ProductController,
+    AuthController,
+  ],
   providers: [
     CreateAccountUseCase,
     ListAllAccountsUseCase,
@@ -48,6 +55,8 @@ import {
     FindProductByIdUseCase,
     UpdateProductUseCase,
     DeleteProductUseCase,
+
+    AuthService,
   ],
 })
 export class HttpModule {}
