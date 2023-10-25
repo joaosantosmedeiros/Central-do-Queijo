@@ -20,6 +20,8 @@ import { InvalidCategoryException } from '../exceptions/invalid-category-excepti
 import { Product } from '@application/entities/product/product';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 import { UpdateProductBody } from '../dto/body/update-product-body';
+import { Roles } from '../decorators/roles.decorator';
+import { UserType } from 'src/enums/user-type.enum';
 
 @Controller('product')
 export class ProductController {
@@ -47,6 +49,7 @@ export class ProductController {
     return product;
   }
 
+  @Roles(UserType.Admin)
   @Post()
   async create(
     @Body() body: CreateProductBody,
@@ -63,6 +66,7 @@ export class ProductController {
     }
   }
 
+  @Roles(UserType.Admin)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -89,6 +93,7 @@ export class ProductController {
     }
   }
 
+  @Roles(UserType.Admin)
   @Delete(':id')
   @HttpCode(204)
   async delete(@Param('id') id: string): Promise<void> {
