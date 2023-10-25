@@ -21,6 +21,8 @@ import {
   UpdateCategoryUseCase,
 } from '@application/usecases/category-usecases';
 import { CategoryInUseException } from '../exceptions/category-in-use-exception';
+import { Roles } from '../decorators/roles.decorator';
+import { UserType } from 'src/enums/user-type.enum';
 
 @Controller('category')
 export class CategoryController {
@@ -51,6 +53,7 @@ export class CategoryController {
     return category;
   }
 
+  @Roles(UserType.Admin)
   @Post()
   async create(@Body() body: CreateCategoryBody) {
     try {
@@ -64,6 +67,7 @@ export class CategoryController {
     }
   }
 
+  @Roles(UserType.Admin)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -88,6 +92,7 @@ export class CategoryController {
     });
   }
 
+  @Roles(UserType.Admin)
   @Delete(':id')
   @HttpCode(204)
   async delete(@Param('id') id: string): Promise<void> {
