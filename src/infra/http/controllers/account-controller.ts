@@ -15,6 +15,7 @@ import {
   ListAllAccountsUseCase,
   UpdateAccountUseCase,
 } from '@application/usecases/account-usecases';
+import * as bcrypt from 'bcrypt';
 
 import { CreateAccountBody } from '../dto/create-account-body';
 import { PasswordDontMatchException } from '../exceptions/password-dont-match-exception';
@@ -58,11 +59,14 @@ export class AccountController {
       throw new PasswordDontMatchException();
     }
 
+    const saltOrRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+
     try {
       const { account } = await this.createAccountUseCase.execute({
         name,
         email,
-        password,
+        password: hashedPassword,
       });
 
       return { account };
@@ -92,9 +96,17 @@ export class AccountController {
       }
     }
 
+    const saltOrRounds = 10;
+
     return this.updateAccountUseCase.execute({
       email,
-      props: updateAccountBody,
+      props: {
+        newEmail: updateAccountBody.newEmail,
+        newName: updateAccountBody.newName,
+        newPassword: updateAccountBody.newPassword
+          ? await bcrypt.hash(updateAccountBody.newPassword, saltOrRounds)
+          : undefined,
+      },
     });
   }
 
