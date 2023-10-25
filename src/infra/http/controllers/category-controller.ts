@@ -9,7 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateCategoryBody } from '../dto/create-category-body';
+import { CreateCategoryBody } from '../dto/body/create-category-body';
 import { CategoryAlreadyExistsException } from '../exceptions/category-already-exists-exception';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 import {

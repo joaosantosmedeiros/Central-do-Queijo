@@ -17,11 +17,11 @@ import {
 } from '@application/usecases/account-usecases';
 import * as bcrypt from 'bcrypt';
 
-import { CreateAccountBody } from '../dto/create-account-body';
+import { CreateAccountBody } from '../dto/body/create-account-body';
 import { PasswordDontMatchException } from '../exceptions/password-dont-match-exception';
 import { EmailInUseException } from '../exceptions/email-in-use-exception';
 import { Account } from '@application/entities/account/account';
-import { UpdateAccountBody } from '../dto/update-account-body';
+import { UpdateAccountBody } from '../dto/body/update-account-body';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 
 @Controller('account')

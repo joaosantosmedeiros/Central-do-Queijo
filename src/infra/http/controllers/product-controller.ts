@@ -15,11 +15,11 @@ import {
   ListProductsUseCase,
   UpdateProductUseCase,
 } from '@application/usecases/product-usecases';
-import { CreateProductBody } from '../dto/create-product-body';
+import { CreateProductBody } from '../dto/body/create-product-body';
 import { InvalidCategoryException } from '../exceptions/invalid-category-exception';
 import { Product } from '@application/entities/product/product';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
-import { UpdateProductBody } from '../dto/update-product-body';
+import { UpdateProductBody } from '../dto/body/update-product-body';
 
 @Controller('product')
 export class ProductController {

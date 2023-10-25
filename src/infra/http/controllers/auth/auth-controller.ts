@@ -1,5 +1,4 @@
 import { Account } from '@application/entities/account/account';
-import { LoginDto } from '@infra/http/dto/login-body';
 import {
   Body,
   Controller,
@@ -8,6 +7,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LoginDto } from '@infra/http/dto/body/login-body';
 
 @Controller('auth')
 export class AuthController {
