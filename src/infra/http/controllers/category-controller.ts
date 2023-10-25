@@ -20,6 +20,7 @@ import {
   ListCategoriesUseCase,
   UpdateCategoryUseCase,
 } from '@application/usecases/category-usecases';
+import { CategoryInUseException } from '../exceptions/category-in-use-exception';
 
 @Controller('category')
 export class CategoryController {
@@ -95,6 +96,13 @@ export class CategoryController {
       throw new EntityNotFoundException('Category');
     }
 
-    await this.deleteCategoryByIdUseCase.execute(id);
+    try {
+      await this.deleteCategoryByIdUseCase.execute(id);
+    } catch (err: any) {
+      if (err.code === 'P2003') {
+        throw new CategoryInUseException();
+      }
+      console.log(err);
+    }
   }
 }
