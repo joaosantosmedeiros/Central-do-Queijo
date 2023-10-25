@@ -9,7 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { SaveCategoryBody } from '../dto/save-category-body';
+import { CreateCategoryBody } from '../dto/create-category-body';
 import { CategoryAlreadyExistsException } from '../exceptions/category-already-exists-exception';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 import {
@@ -51,7 +51,7 @@ export class CategoryController {
   }
 
   @Post()
-  async create(@Body() body: SaveCategoryBody) {
+  async create(@Body() body: CreateCategoryBody) {
     try {
       const { category } = await this.createCategoryUseCase.execute(body);
 
@@ -66,7 +66,7 @@ export class CategoryController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() body: SaveCategoryBody,
+    @Body() body: CreateCategoryBody,
   ): Promise<Category> {
     const category = await this.findCategoryByIdUseCase.execute(id);
     if (!category) {
