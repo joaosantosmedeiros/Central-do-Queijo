@@ -18,11 +18,13 @@ import {
   UpdateCategoryUseCase,
 } from '@application/usecases/category-usecases';
 import { ProductController } from './controllers/product-controller';
-import { CreateProductUseCase } from '@application/usecases/product-usecases/create-product-usecase';
-import { ListProductsUseCase } from '@application/usecases/product-usecases/list-products-usecase';
-import { FindProductByIdUseCase } from '@application/usecases/product-usecases/find-product-by-id-usecase';
-import { DeleteProductUseCase } from '@application/usecases/product-usecases/delete-product-usecase';
-import { UpdateProductUseCase } from '@application/usecases/product-usecases/update-product-usecase';
+import {
+  CreateProductUseCase,
+  DeleteProductUseCase,
+  FindProductByIdUseCase,
+  ListProductsUseCase,
+  UpdateProductUseCase,
+} from '@application/usecases/product-usecases';
 
 @Module({
   imports: [DatabaseModule],

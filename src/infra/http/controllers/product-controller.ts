@@ -8,15 +8,17 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateProductUseCase } from '@application/usecases/product-usecases/create-product-usecase';
+import {
+  CreateProductUseCase,
+  DeleteProductUseCase,
+  FindProductByIdUseCase,
+  ListProductsUseCase,
+  UpdateProductUseCase,
+} from '@application/usecases/product-usecases';
 import { CreateProductBody } from '../dto/create-product-body';
 import { InvalidCategoryException } from '../exceptions/invalid-category-exception';
-import { ListProductsUseCase } from '@application/usecases/product-usecases/list-products-usecase';
 import { Product } from '@application/entities/product/product';
-import { FindProductByIdUseCase } from '@application/usecases/product-usecases/find-product-by-id-usecase';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
-import { DeleteProductUseCase } from '@application/usecases/product-usecases/delete-product-usecase';
-import { UpdateProductUseCase } from '@application/usecases/product-usecases/update-product-usecase';
 import { UpdateProductBody } from '../dto/update-product-body';
 
 @Controller('product')
