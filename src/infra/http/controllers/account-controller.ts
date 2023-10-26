@@ -55,7 +55,7 @@ export class AccountController {
   ): Promise<Account | null> {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
-    if (!account) {
+    if (!account || !account.isActive) {
       throw new EntityNotFoundException('Account');
     }
 
@@ -99,7 +99,7 @@ export class AccountController {
     @Body() updateAccountBody: UpdateAccountBody,
   ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
-    if (!account) {
+    if (!account || !account.isActive) {
       throw new EntityNotFoundException('Account');
     }
 
@@ -138,7 +138,7 @@ export class AccountController {
     @UserId() userId: string,
   ): Promise<void> {
     const account = await this.findAccountByEmailUseCase.execute(email);
-    if (!account) {
+    if (!account || !account.isActive) {
       throw new EntityNotFoundException('Account');
     }
 

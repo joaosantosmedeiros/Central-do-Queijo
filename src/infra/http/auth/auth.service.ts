@@ -22,7 +22,7 @@ export class AuthService {
       account?.password ? account?.password : '',
     );
 
-    if (!passwordMatches || !account) {
+    if (!passwordMatches || !account || !account.isActive) {
       throw new HttpException('Invalid mail or password', HttpStatus.FORBIDDEN);
     }
 
