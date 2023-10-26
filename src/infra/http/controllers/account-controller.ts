@@ -5,6 +5,8 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -23,6 +25,9 @@ import { EmailInUseException } from '../exceptions/email-in-use-exception';
 import { Account } from '@application/entities/account/account';
 import { UpdateAccountBody } from '../dto/body/update-account-body';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
+import { Roles } from '../decorators/roles.decorator';
+import { UserType } from 'src/enums/user-type.enum';
+import { UserId } from '../decorators/user-id.decorator';
 
 @Controller('account')
 export class AccountController {
@@ -34,6 +39,7 @@ export class AccountController {
     private updateAccountUseCase: UpdateAccountUseCase,
   ) {}
 
+  @Roles(UserType.Admin)
   @Get()
   async listAll() {
     const accounts = await this.listAllAccountsUseCase.execute();
@@ -41,12 +47,20 @@ export class AccountController {
     return { accounts };
   }
 
+  @Roles(UserType.User, UserType.Admin)
   @Get(':email')
-  async findById(@Param('email') email: string): Promise<Account | null> {
+  async findByEmail(
+    @Param('email') email: string,
+    @UserId() userId: string,
+  ): Promise<Account | null> {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
     if (!account) {
       throw new EntityNotFoundException('Account');
+    }
+
+    if (account.id != userId) {
+      throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
     }
 
     return account;
@@ -77,14 +91,20 @@ export class AccountController {
     }
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Put(':email')
   async update(
     @Param('email') email: string,
+    @UserId() userId: string,
     @Body() updateAccountBody: UpdateAccountBody,
   ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
     if (!account) {
       throw new EntityNotFoundException('Account');
+    }
+
+    if (account.id != userId) {
+      throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
     }
 
     if (updateAccountBody.newEmail) {
@@ -110,12 +130,20 @@ export class AccountController {
     });
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Delete(':email')
   @HttpCode(204)
-  async delete(@Param('email') email: string): Promise<void> {
+  async delete(
+    @Param('email') email: string,
+    @UserId() userId: string,
+  ): Promise<void> {
     const account = await this.findAccountByEmailUseCase.execute(email);
     if (!account) {
       throw new EntityNotFoundException('Account');
+    }
+
+    if (account.id != userId) {
+      throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
     }
 
     await this.deleteAccountByEmailUseCase.execute(email);
