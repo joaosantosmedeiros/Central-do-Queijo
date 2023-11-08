@@ -1,4 +1,4 @@
-import { CartProduct } from '@prisma/client';
+import { CartProduct } from '@application/entities/cart-product/cart-product';
 
 export abstract class CartProductRepository {
   abstract verifyProductInCart(
