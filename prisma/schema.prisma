@@ -31,19 +31,32 @@ model Category {
 }
 
 model Product {
-  id         String   @id
-  name       String
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String        @id
+  name        String
+  category    Category      @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  CartProduct CartProduct[]
 }
 
 model Cart {
+  id          String        @id
+  isActive    Boolean       @default(true)
+  account     Account       @relation(fields: [accountId], references: [id])
+  accountId   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  CartProduct CartProduct[]
+}
+
+model CartProduct {
   id        String   @id
-  isActive  Boolean  @default(true)
-  account   Account  @relation(fields: [accountId], references: [id])
-  accountId String
+  cartId    String
+  productId String
+  amount    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }
