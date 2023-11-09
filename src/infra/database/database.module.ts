@@ -6,6 +6,10 @@ import { CategoryRepository } from '@application/repositories/category-repositor
 import { PrismaCategoryRepository } from './prisma/repositories/prisma-category-repository';
 import { ProductRepository } from '@application/repositories/product-repository';
 import { PrismaProductRepository } from './prisma/repositories/prisma-product-repository';
+import { CartRepository } from '@application/repositories/cart-repository';
+import { PrismaCartRepository } from './prisma/repositories/prisma-cart-repository';
+import { CartProductRepository } from '@application/repositories/cart-product-repository';
+import { PrismaCartProductRepository } from './prisma/repositories/prisma-cart-product-repository';
 
 @Module({
   providers: [
@@ -22,7 +26,21 @@ import { PrismaProductRepository } from './prisma/repositories/prisma-product-re
       provide: ProductRepository,
       useClass: PrismaProductRepository,
     },
+    {
+      provide: CartRepository,
+      useClass: PrismaCartRepository,
+    },
+    {
+      provide: CartProductRepository,
+      useClass: PrismaCartProductRepository,
+    },
   ],
-  exports: [AccountRepository, CategoryRepository, ProductRepository],
+  exports: [
+    AccountRepository,
+    CategoryRepository,
+    ProductRepository,
+    CartRepository,
+    CartProductRepository,
+  ],
 })
 export class DatabaseModule {}
