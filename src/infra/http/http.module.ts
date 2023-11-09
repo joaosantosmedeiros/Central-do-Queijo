@@ -26,10 +26,18 @@ import {
   UpdateProductUseCase,
 } from '@application/usecases/product-usecases';
 import { AuthModule } from './auth/auth.module';
+import { CartController } from './controllers/cart-controller';
+import { CreateCartUseCase } from '@application/usecases/cart-usecases/create-cart-usecase';
+import { CreateCartProductUseCase } from '@application/usecases/cart-product-usecases/create-cart-product-usecase';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
-  controllers: [AccountController, CategoryController, ProductController],
+  controllers: [
+    AccountController,
+    CategoryController,
+    ProductController,
+    CartController,
+  ],
   providers: [
     CreateAccountUseCase,
     ListAllAccountsUseCase,
@@ -49,6 +57,9 @@ import { AuthModule } from './auth/auth.module';
     FindProductByIdUseCase,
     UpdateProductUseCase,
     DeleteProductUseCase,
+
+    CreateCartUseCase,
+    CreateCartProductUseCase,
   ],
 })
 export class HttpModule {}
