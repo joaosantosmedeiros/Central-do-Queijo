@@ -1,5 +1,5 @@
 import { Product } from '@application/entities/product/product';
-import { Product as RawProduct } from '@prisma/client';
+import { PrismaCategoryMapper } from './prisma-category-mapper';
 
 export class PrismaProductMapper {
   static toPrisma(product: Product) {
@@ -10,13 +10,16 @@ export class PrismaProductMapper {
     };
   }
 
-  static toDomain(raw: RawProduct) {
+  static toDomain(raw: any) {
     return new Product(
       {
         name: raw.name,
         categoryId: raw.categoryId,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
+        category: raw.category
+          ? PrismaCategoryMapper.toDomain(raw.category)
+          : undefined,
       },
       raw.id,
     );

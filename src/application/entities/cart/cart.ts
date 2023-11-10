@@ -1,9 +1,11 @@
 import { Replace } from '@helpers/replace';
 import { randomUUID } from 'crypto';
+import { CartProduct } from '../cart-product/cart-product';
 
 export interface CartProps {
   accountId: string;
   isActive: boolean;
+  cartProduct?: CartProduct[];
   createdAt: Date;
   updatedAt: Date;
 }

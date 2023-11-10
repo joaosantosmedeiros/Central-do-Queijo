@@ -1,5 +1,5 @@
 import { CartProduct } from '@application/entities/cart-product/cart-product';
-import { CartProduct as RawCartProduct } from '@prisma/client';
+import { PrismaProductMapper } from './prisma-product-mapper';
 
 export class PrismaCartProductMapper {
   static toPrisma(cartProduct: CartProduct) {
@@ -11,12 +11,15 @@ export class PrismaCartProductMapper {
     };
   }
 
-  static toDomain(raw: RawCartProduct): CartProduct {
+  static toDomain(raw: any): CartProduct {
     return new CartProduct(
       {
         amount: raw.amount,
         cartId: raw.cartId,
         productId: raw.productId,
+        product: raw.product
+          ? PrismaProductMapper.toDomain(raw.product)
+          : undefined,
       },
       raw.id,
     );

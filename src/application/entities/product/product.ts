@@ -1,9 +1,11 @@
 import { Replace } from '@helpers/replace';
 import { randomUUID } from 'crypto';
+import { Category } from '../category/category';
 
 export interface ProductProps {
   name: string;
   categoryId: string;
+  category?: Category;
   createdAt: Date;
   updatedAt: Date;
 }
