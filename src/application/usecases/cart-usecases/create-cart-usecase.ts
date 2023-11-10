@@ -15,8 +15,14 @@ export interface CreateCartResponse {
 export class CreateCartUseCase {
   constructor(private cartRepository: CartRepository) {}
 
-  async execute(accountId: string): Promise<CreateCartResponse> {
-    const cart = await this.cartRepository.verifyActiveCart(accountId);
+  async execute(
+    accountId: string,
+    withRelations?: boolean,
+  ): Promise<CreateCartResponse> {
+    const cart = await this.cartRepository.findCartByUserId(
+      accountId,
+      withRelations,
+    );
 
     if (!cart) {
       const createdCart = await this.cartRepository.create(

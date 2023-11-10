@@ -7,11 +7,26 @@ import { PrismaCartMapper } from '../mappers/prisma-cart-mapper';
 @Injectable()
 export class PrismaCartRepository implements CartRepository {
   constructor(private prismaService: PrismaService) {}
-  async verifyActiveCart(accountId: string): Promise<Cart | null> {
+  async findCartByUserId(
+    accountId: string,
+    withRelations?: boolean,
+  ): Promise<Cart | null> {
+    const relations = withRelations
+      ? {
+          CartProduct: {
+            include: {
+              product: true,
+            },
+          },
+        }
+      : undefined;
+
     const cart = await this.prismaService.cart.findFirst({
       where: {
         accountId,
+        isActive: true,
       },
+      include: relations,
     });
 
     return cart ? PrismaCartMapper.toDomain(cart) : null;

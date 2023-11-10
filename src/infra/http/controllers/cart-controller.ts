@@ -13,6 +13,7 @@ import { UserId } from '../decorators/user-id.decorator';
 import { CreateCartProductUseCase } from '@application/usecases/cart-product-usecases/create-cart-product-usecase';
 import { FindProductByIdUseCase } from '@application/usecases/product-usecases';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
+import { Cart } from '@application/entities/cart/cart';
 
 @Roles(UserType.User)
 @Controller('cart')
@@ -28,15 +29,15 @@ export class CartController {
   async createCart(
     @Body() body: SaveCartBody,
     @UserId() accountId: string,
-  ): Promise<any> {
-    const { cart } = await this.createCartUseCase.execute(accountId);
-
+  ): Promise<Cart> {
+    const { cart } = await this.createCartUseCase.execute(accountId, true);
     const product = await this.findProductByIdUseCase.execute(body.productId);
 
     if (!product) {
       throw new EntityNotFoundException('Product');
     }
 
-    return this.createCartProductUseCase.execute(body, cart);
+    await this.createCartProductUseCase.execute(body, cart);
+    return cart;
   }
 }
