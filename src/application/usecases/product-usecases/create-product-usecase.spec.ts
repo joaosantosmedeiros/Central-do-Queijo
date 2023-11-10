@@ -11,6 +11,7 @@ describe('CreateProduct Use Case', () => {
     const { product } = await createProductUseCase.execute({
       name: 'any_name',
       categoryId: 'any_id',
+      price: 1,
     });
 
     expect(product).toBeTruthy();
@@ -24,6 +25,7 @@ describe('CreateProduct Use Case', () => {
       await createProductUseCase.execute({
         name: 'any_name',
         categoryId: 'invalid_id',
+        price: 1,
       });
     }).rejects.toThrow(Error);
   });

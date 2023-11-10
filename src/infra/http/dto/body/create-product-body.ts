@@ -1,4 +1,4 @@
-import { IsNotEmpty, MinLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, MinLength } from 'class-validator';
 
 export class CreateProductBody {
   @IsNotEmpty()
@@ -7,4 +7,8 @@ export class CreateProductBody {
 
   @IsNotEmpty()
   categoryId: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  price: number;
 }

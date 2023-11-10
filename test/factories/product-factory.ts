@@ -8,5 +8,5 @@ export function makeProduct(
   updatedAt = new Date(),
   id = randomUUID(),
 ) {
-  return new Product({ name, categoryId, createdAt, updatedAt }, id);
+  return new Product({ name, categoryId, createdAt, updatedAt, price: 1 }, id);
 }

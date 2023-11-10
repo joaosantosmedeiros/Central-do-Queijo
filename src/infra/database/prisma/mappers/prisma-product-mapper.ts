@@ -6,6 +6,7 @@ export class PrismaProductMapper {
     return {
       id: product.id,
       name: product.name,
+      price: product.price,
       categoryId: product.categoryId,
     };
   }
@@ -15,6 +16,7 @@ export class PrismaProductMapper {
       {
         name: raw.name,
         categoryId: raw.categoryId,
+        price: raw.price,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
         category: raw.category
