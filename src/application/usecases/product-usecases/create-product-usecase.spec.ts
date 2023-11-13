@@ -12,6 +12,7 @@ describe('CreateProduct Use Case', () => {
       name: 'any_name',
       categoryId: 'any_id',
       price: 1,
+      image: 'any_image',
     });
 
     expect(product).toBeTruthy();
@@ -26,6 +27,7 @@ describe('CreateProduct Use Case', () => {
         name: 'any_name',
         categoryId: 'invalid_id',
         price: 1,
+        image: 'any_image',
       });
     }).rejects.toThrow(Error);
   });

@@ -6,6 +6,7 @@ export interface CreateProductRequest {
   name: string;
   categoryId: string;
   price: number;
+  image: string;
 }
 
 export interface CreateProductResponse {
@@ -17,11 +18,12 @@ export class CreateProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 
   async execute(request: CreateProductRequest): Promise<CreateProductResponse> {
-    const { name, categoryId, price } = request;
+    const { name, categoryId, price, image } = request;
 
     const product = new Product({
       name,
       categoryId,
+      image,
       price,
     });
 

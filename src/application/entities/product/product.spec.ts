@@ -5,6 +5,7 @@ describe('Product', () => {
     const product = new Product({
       name: 'any_name',
       categoryId: 'any_id',
+      image: 'any_image',
       price: 1,
     });
     expect(product).toBeTruthy();
@@ -15,12 +16,14 @@ describe('Product', () => {
       name: 'any_name',
       categoryId: 'any_id',
       price: 1,
+      image: 'any_image',
     });
 
     expect(product.updatedAt).toEqual(product.createdAt);
     expect(product.id).toBeTruthy();
     expect(product.name).toBe('any_name');
     expect(product.categoryId).toBe('any_id');
+    expect(product.image).toBe('any_image');
   });
 
   it('should change updatedAt field if one or more fields are changed', async () => {
@@ -28,6 +31,7 @@ describe('Product', () => {
       name: 'any_name',
       categoryId: 'any_id',
       price: 1,
+      image: 'any_image',
     });
     const oldUpdatedAt = product.updatedAt;
 

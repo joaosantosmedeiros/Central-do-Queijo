@@ -5,6 +5,7 @@ import { Category } from '../category/category';
 export interface ProductProps {
   name: string;
   price: number;
+  image: string;
   categoryId: string;
   category?: Category;
   createdAt: Date;
@@ -44,6 +45,14 @@ export class Product {
   }
   public set price(price: number) {
     this.props.price = price;
+    this.props.updatedAt = new Date();
+  }
+
+  public get image() {
+    return this.props.image;
+  }
+  public set image(image: string) {
+    this.props.image = image;
     this.props.updatedAt = new Date();
   }
 
