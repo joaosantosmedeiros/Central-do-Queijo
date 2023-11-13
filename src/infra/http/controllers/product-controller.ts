@@ -22,6 +22,7 @@ import { EntityNotFoundException } from '../exceptions/entity-not-found-exceptio
 import { UpdateProductBody } from '../dto/body/update-product-body';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
+import { ReturnProductDto } from '../dto/return/return-product-dto';
 
 @Controller('product')
 export class ProductController {
@@ -34,30 +35,29 @@ export class ProductController {
   ) {}
 
   @Get()
-  async list(): Promise<Product[]> {
-    return this.listProductsUseCase.execute();
+  async list(): Promise<ReturnProductDto[]> {
+    const products = await this.listProductsUseCase.execute();
+    return products.map((product) => new ReturnProductDto(product));
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string): Promise<Product | null> {
+  async findById(@Param('id') id: string): Promise<ReturnProductDto | null> {
     const product = await this.findProductByIdUseCase.execute(id);
 
     if (!product) {
       throw new EntityNotFoundException('Product');
     }
 
-    return product;
+    return new ReturnProductDto(product);
   }
 
   @Roles(UserType.Admin)
   @Post()
-  async create(
-    @Body() body: CreateProductBody,
-  ): Promise<{ product: Product } | undefined> {
+  async create(@Body() body: CreateProductBody): Promise<Product | undefined> {
     try {
       const { product } = await this.createProductUseCase.execute(body);
 
-      return { product };
+      return product;
     } catch (err: any) {
       console.log(err);
       if (err.code === 'P2003') {
@@ -82,6 +82,8 @@ export class ProductController {
         id,
         name: body.name,
         categoryId: body.categoryId,
+        image: body.image,
+        price: body.price,
       });
 
       return product;

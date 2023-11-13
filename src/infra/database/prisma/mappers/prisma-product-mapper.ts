@@ -8,6 +8,7 @@ export class PrismaProductMapper {
       name: product.name,
       price: product.price,
       categoryId: product.categoryId,
+      image: product.image,
     };
   }
 
@@ -17,6 +18,7 @@ export class PrismaProductMapper {
         name: raw.name,
         categoryId: raw.categoryId,
         price: raw.price,
+        image: raw.image,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
         category: raw.category
