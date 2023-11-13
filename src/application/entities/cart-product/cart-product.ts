@@ -49,6 +49,10 @@ export class CartProduct {
     this.props.updatedAt = new Date();
   }
 
+  public get product() {
+    return this.props.product;
+  }
+
   public get createdAt() {
     return this.props.createdAt;
   }

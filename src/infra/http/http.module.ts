@@ -29,6 +29,7 @@ import { AuthModule } from './auth/auth.module';
 import { CartController } from './controllers/cart-controller';
 import { CreateCartUseCase } from '@application/usecases/cart-usecases/create-cart-usecase';
 import { CreateCartProductUseCase } from '@application/usecases/cart-product-usecases/create-cart-product-usecase';
+import { FindCartByAccountIdUseCase } from '@application/usecases/cart-usecases/find-cart-by-account-id-usecase';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
@@ -60,6 +61,7 @@ import { CreateCartProductUseCase } from '@application/usecases/cart-product-use
 
     CreateCartUseCase,
     CreateCartProductUseCase,
+    FindCartByAccountIdUseCase,
   ],
 })
 export class HttpModule {}

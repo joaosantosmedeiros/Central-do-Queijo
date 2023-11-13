@@ -50,6 +50,10 @@ export class Cart {
     return this.props.createdAt;
   }
 
+  public get cartProduct() {
+    return this.props.cartProduct;
+  }
+
   public get updatedAt() {
     return this.props.updatedAt;
   }

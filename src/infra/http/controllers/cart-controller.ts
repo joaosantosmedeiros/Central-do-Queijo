@@ -13,7 +13,8 @@ import { UserId } from '../decorators/user-id.decorator';
 import { CreateCartProductUseCase } from '@application/usecases/cart-product-usecases/create-cart-product-usecase';
 import { FindProductByIdUseCase } from '@application/usecases/product-usecases';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
-import { Cart } from '@application/entities/cart/cart';
+import { ReturnCartDto } from '../dto/return/return-cart-dto';
+import { FindCartByAccountIdUseCase } from '@application/usecases/cart-usecases/find-cart-by-account-id-usecase';
 
 @Roles(UserType.User)
 @Controller('cart')
@@ -22,6 +23,7 @@ export class CartController {
     private readonly createCartUseCase: CreateCartUseCase,
     private readonly createCartProductUseCase: CreateCartProductUseCase,
     private readonly findProductByIdUseCase: FindProductByIdUseCase,
+    private readonly findCartByAccountIdUseCase: FindCartByAccountIdUseCase,
   ) {}
 
   @UsePipes(ValidationPipe)
@@ -29,7 +31,7 @@ export class CartController {
   async createCart(
     @Body() body: SaveCartBody,
     @UserId() accountId: string,
-  ): Promise<Cart> {
+  ): Promise<ReturnCartDto> {
     const { cart } = await this.createCartUseCase.execute(accountId, true);
     const product = await this.findProductByIdUseCase.execute(body.productId);
 
@@ -38,6 +40,10 @@ export class CartController {
     }
 
     await this.createCartProductUseCase.execute(body, cart);
-    return cart;
+    const foundCart = await this.findCartByAccountIdUseCase.execute(accountId);
+    if (foundCart) {
+      return new ReturnCartDto(foundCart);
+    }
+    return new ReturnCartDto(cart);
   }
 }
