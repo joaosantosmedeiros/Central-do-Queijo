@@ -1,8 +1,6 @@
 import { Product } from '@application/entities/product/product';
 
 export abstract class ProductRepository {
-  public products: Product[];
-
   abstract findById(id: string): Promise<Product | null>;
   abstract findByName(name: string): Promise<Product | null>;
   abstract list(): Promise<Product[]>;
@@ -12,6 +10,8 @@ export abstract class ProductRepository {
     props: {
       name: string;
       categoryId: string;
+      price: number;
+      image: string;
     },
   ): Promise<Product>;
   abstract delete(id: string): Promise<void>;

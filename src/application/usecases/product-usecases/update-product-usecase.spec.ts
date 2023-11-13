@@ -18,6 +18,8 @@ describe('Update Product UseCase', () => {
       id: product.id,
       name: 'updated_name',
       categoryId: 'updated_id',
+      price: 33,
+      image: 'updated_image',
     });
     const actual = updatedProduct.name;
 
@@ -37,6 +39,31 @@ describe('Update Product UseCase', () => {
           id: 'fake_id',
           name: 'any_name',
           categoryId: 'updated_id',
+          price: 33,
+          image: 'updated_image',
+        }),
+    ).rejects.toThrow();
+  });
+
+  it('should not update a product with invalid category', async () => {
+    const inMemoryProductRepository = new InMemoryProductsRepository();
+    const updateProductUseCase = new UpdateProductUseCase(
+      inMemoryProductRepository,
+    );
+
+    inMemoryProductRepository.categoriesIds = ['any_id'];
+    await inMemoryProductRepository.create(makeProduct());
+
+    const product = inMemoryProductRepository.products[0];
+
+    expect(
+      async () =>
+        await updateProductUseCase.execute({
+          id: product.id,
+          name: 'any_name',
+          categoryId: 'updated_id',
+          price: 33,
+          image: 'updated_image',
         }),
     ).rejects.toThrow();
   });

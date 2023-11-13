@@ -39,11 +39,11 @@ export class PrismaProductRepository implements ProductRepository {
 
   async update(
     id: string,
-    props: { name: string; categoryId: string },
+    props: { name: string; categoryId: string; price: number; image: string },
   ): Promise<Product> {
     const raw = await this.prismaService.product.update({
       where: { id },
-      data: { name: props.name, categoryId: props.categoryId },
+      data: props,
     });
 
     return PrismaProductMapper.toDomain(raw);

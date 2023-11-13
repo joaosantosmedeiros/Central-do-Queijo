@@ -28,7 +28,7 @@ export class InMemoryProductsRepository implements ProductRepository {
 
   async update(
     id: string,
-    props: { name: string; categoryId: string },
+    props: { name: string; categoryId: string; price: number; image: string },
   ): Promise<Product> {
     const product = this.products.find((prduct) => prduct.id === id);
     if (!product) {
@@ -41,6 +41,8 @@ export class InMemoryProductsRepository implements ProductRepository {
 
     product.name = props.name;
     product.categoryId = props.categoryId;
+    product.image = props.image;
+    product.price = props.price;
 
     return product;
   }

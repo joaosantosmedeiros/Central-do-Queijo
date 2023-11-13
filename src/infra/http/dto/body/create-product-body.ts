@@ -11,4 +11,7 @@ export class CreateProductBody {
   @IsNumber()
   @IsNotEmpty()
   price: number;
+
+  @IsNotEmpty()
+  image: string;
 }

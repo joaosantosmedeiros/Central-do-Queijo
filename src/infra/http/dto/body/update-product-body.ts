@@ -1,4 +1,4 @@
-import { IsOptional, MinLength } from 'class-validator';
+import { IsOptional, IsPositive, MinLength } from 'class-validator';
 
 export class UpdateProductBody {
   @MinLength(4)
@@ -7,4 +7,11 @@ export class UpdateProductBody {
 
   @IsOptional()
   categoryId: string;
+
+  @IsOptional()
+  image: string;
+
+  @IsOptional()
+  @IsPositive()
+  price: number;
 }
