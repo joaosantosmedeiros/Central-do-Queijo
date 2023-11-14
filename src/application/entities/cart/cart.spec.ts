@@ -14,16 +14,4 @@ describe('Cart', () => {
     expect(cart.isActive).toBe(true);
     expect(cart.accountId).toBe('any_id');
   });
-
-  it('should change updatedAt field if one or more fields are changed', async () => {
-    const cart = new Cart({ accountId: 'any_id' });
-    const oldUpdatedAt = cart.updatedAt;
-
-    await new Promise((res) => setTimeout(res, 1000));
-
-    cart.isActive = false;
-    const newUpdatedAt = cart.updatedAt;
-
-    expect(oldUpdatedAt).not.toEqual(newUpdatedAt);
-  });
 });

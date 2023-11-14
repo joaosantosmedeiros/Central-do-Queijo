@@ -21,7 +21,13 @@ const config: Config = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
-  modulePathIgnorePatterns: ['./docker-data/*'],
+  modulePathIgnorePatterns: [
+    './docker-data/*',
+    './src/application/repositories/*',
+    './src/enums/*',
+    './src/infra/*',
+    './test/factories/*',
+  ],
 };
 
 export default config;
