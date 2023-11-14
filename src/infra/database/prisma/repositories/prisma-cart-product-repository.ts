@@ -39,4 +39,13 @@ export class PrismaCartProductRepository implements CartProductRepository {
 
     return PrismaCartProductMapper.toDomain(cartProduct);
   }
+
+  async delete(productId: string, cartId: string): Promise<void> {
+    await this.prismaService.cartProduct.deleteMany({
+      where: {
+        productId,
+        cartId,
+      },
+    });
+  }
 }

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Param,
   Post,
   UsePipes,
   ValidationPipe,
@@ -19,16 +20,20 @@ import { EntityNotFoundException } from '../exceptions/entity-not-found-exceptio
 import { ReturnCartDto } from '../dto/return/return-cart-dto';
 import { FindCartByAccountIdUseCase } from '@application/usecases/cart-usecases/find-cart-by-account-id-usecase';
 import { ClearCartUseCase } from '@application/usecases/cart-usecases/clear-cart-usecase';
+import { DeleteCartProductUseCase } from '@application/usecases/cart-product-usecases/delete-cart-product-usecase';
+import { FindCartProductUseCase } from '@application/usecases/cart-product-usecases/find-cart-product-usecase';
 
 @Roles(UserType.User)
 @Controller('cart')
 export class CartController {
   constructor(
-    private readonly createCartUseCase: CreateCartUseCase,
-    private readonly createCartProductUseCase: CreateCartProductUseCase,
     private readonly findProductByIdUseCase: FindProductByIdUseCase,
     private readonly findCartByAccountIdUseCase: FindCartByAccountIdUseCase,
+    private readonly findCartProductUseCase: FindCartProductUseCase,
+    private readonly createCartUseCase: CreateCartUseCase,
+    private readonly createCartProductUseCase: CreateCartProductUseCase,
     private readonly clearCartUseCase: ClearCartUseCase,
+    private readonly deleteCartProductUseCase: DeleteCartProductUseCase,
   ) {}
 
   @UsePipes(ValidationPipe)
@@ -66,5 +71,27 @@ export class CartController {
     }
 
     await this.clearCartUseCase.execute(cart);
+  }
+
+  @Delete('product/:productId')
+  @HttpCode(204)
+  async deleteProductInCart(
+    @UserId() accountId: string,
+    @Param('productId') productId: string,
+  ) {
+    const cart = await this.findCartByAccountIdUseCase.execute(accountId);
+    if (!cart) {
+      throw new EntityNotFoundException('Cart');
+    }
+
+    const cartProduct = await this.findCartProductUseCase.execute(
+      productId,
+      cart.id,
+    );
+    if (!cartProduct) {
+      throw new EntityNotFoundException('CartProduct');
+    }
+
+    await this.deleteCartProductUseCase.execute(cartProduct.productId, cart.id);
   }
 }
