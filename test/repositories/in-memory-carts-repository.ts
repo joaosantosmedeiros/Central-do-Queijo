@@ -16,4 +16,13 @@ export class InMemoryCartRepository implements CartRepository {
     this.carts.push(createdCart);
     return createdCart;
   }
+
+  async disable(id: string): Promise<void> {
+    const cart = this.carts.find((cart) => cart.id === id);
+    if (!cart) {
+      throw new Error('Cart not found.');
+    }
+
+    cart.isActive = false;
+  }
 }

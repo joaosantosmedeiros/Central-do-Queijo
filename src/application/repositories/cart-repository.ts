@@ -6,4 +6,5 @@ export abstract class CartRepository {
     withRelations?: boolean,
   ): Promise<Cart | null>;
   abstract create(cart: Cart): Promise<Cart>;
+  abstract disable(id: string): Promise<void>;
 }
