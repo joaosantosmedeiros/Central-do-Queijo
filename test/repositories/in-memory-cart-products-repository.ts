@@ -33,4 +33,17 @@ export class InMemoryCartProductRepository implements CartProductRepository {
     cartProduct.amount = amount;
     return cartProduct;
   }
+
+  async delete(productId: string, cartId: string): Promise<void> {
+    const cartProductIndex = this.cartProducts.findIndex(
+      (cartProduct) =>
+        cartProduct.productId === productId && cartProduct.cartId === cartId,
+    );
+
+    if (cartProductIndex == -1) {
+      throw new Error('CartProduct not found.');
+    }
+
+    this.cartProducts.splice(cartProductIndex, 1);
+  }
 }
