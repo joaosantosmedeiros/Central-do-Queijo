@@ -7,4 +7,5 @@ export abstract class CartProductRepository {
   ): Promise<CartProduct | null>;
   abstract create(cartProduct: CartProduct): Promise<CartProduct>;
   abstract update(amount: number, id: string): Promise<CartProduct>;
+  abstract delete(productId: string, cartId: string): Promise<void>;
 }
