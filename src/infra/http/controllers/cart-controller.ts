@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Post,
   UsePipes,
   ValidationPipe,
@@ -16,6 +18,7 @@ import { FindProductByIdUseCase } from '@application/usecases/product-usecases';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 import { ReturnCartDto } from '../dto/return/return-cart-dto';
 import { FindCartByAccountIdUseCase } from '@application/usecases/cart-usecases/find-cart-by-account-id-usecase';
+import { ClearCartUseCase } from '@application/usecases/cart-usecases/clear-cart-usecase';
 
 @Roles(UserType.User)
 @Controller('cart')
@@ -25,6 +28,7 @@ export class CartController {
     private readonly createCartProductUseCase: CreateCartProductUseCase,
     private readonly findProductByIdUseCase: FindProductByIdUseCase,
     private readonly findCartByAccountIdUseCase: FindCartByAccountIdUseCase,
+    private readonly clearCartUseCase: ClearCartUseCase,
   ) {}
 
   @UsePipes(ValidationPipe)
@@ -50,5 +54,17 @@ export class CartController {
 
     await this.createCartProductUseCase.execute(body, cart);
     return new ReturnCartDto(cart);
+  }
+
+  @Delete()
+  @HttpCode(204)
+  async clearCart(@UserId() accountId: string) {
+    const cart = await this.findCartByAccountIdUseCase.execute(accountId);
+
+    if (!cart) {
+      throw new EntityNotFoundException('Cart');
+    }
+
+    await this.clearCartUseCase.execute(cart);
   }
 }

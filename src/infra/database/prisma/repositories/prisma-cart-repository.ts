@@ -39,4 +39,15 @@ export class PrismaCartRepository implements CartRepository {
 
     return PrismaCartMapper.toDomain(createdCart);
   }
+
+  async disable(id: string): Promise<void> {
+    await this.prismaService.cart.update({
+      data: {
+        isActive: false,
+      },
+      where: {
+        id,
+      },
+    });
+  }
 }

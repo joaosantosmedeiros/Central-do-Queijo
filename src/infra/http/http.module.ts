@@ -30,6 +30,7 @@ import { CartController } from './controllers/cart-controller';
 import { CreateCartUseCase } from '@application/usecases/cart-usecases/create-cart-usecase';
 import { CreateCartProductUseCase } from '@application/usecases/cart-product-usecases/create-cart-product-usecase';
 import { FindCartByAccountIdUseCase } from '@application/usecases/cart-usecases/find-cart-by-account-id-usecase';
+import { ClearCartUseCase } from '@application/usecases/cart-usecases/clear-cart-usecase';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
@@ -62,6 +63,7 @@ import { FindCartByAccountIdUseCase } from '@application/usecases/cart-usecases/
     CreateCartUseCase,
     CreateCartProductUseCase,
     FindCartByAccountIdUseCase,
+    ClearCartUseCase,
   ],
 })
 export class HttpModule {}
