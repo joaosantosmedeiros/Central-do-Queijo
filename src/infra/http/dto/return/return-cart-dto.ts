@@ -3,7 +3,7 @@ import { ReturnCartProductDto } from './return-cart-product-dto';
 
 export class ReturnCartDto {
   id: string;
-  cartProduct: ReturnCartProductDto[];
+  cartProduct: ReturnCartProductDto[] | undefined;
 
   constructor(cart: Cart) {
     this.id = cart.id;
@@ -11,6 +11,6 @@ export class ReturnCartDto {
       ? cart.cartProduct.map(
           (cartProduct) => new ReturnCartProductDto(cartProduct),
         )
-      : [];
+      : undefined;
   }
 }

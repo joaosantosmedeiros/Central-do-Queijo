@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UsePipes,
   ValidationPipe,
@@ -27,12 +28,20 @@ export class CartController {
   ) {}
 
   @UsePipes(ValidationPipe)
+  @Get()
+  async findCartByAccountId(
+    @UserId() accountId: string,
+  ): Promise<ReturnCartDto | null> {
+    const cart = await this.findCartByAccountIdUseCase.execute(accountId);
+    return cart ? new ReturnCartDto(cart) : null;
+  }
+
   @Post()
   async createCart(
     @Body() body: SaveCartBody,
     @UserId() accountId: string,
   ): Promise<ReturnCartDto> {
-    const { cart } = await this.createCartUseCase.execute(accountId, true);
+    const { cart } = await this.createCartUseCase.execute(accountId);
     const product = await this.findProductByIdUseCase.execute(body.productId);
 
     if (!product) {
@@ -40,10 +49,6 @@ export class CartController {
     }
 
     await this.createCartProductUseCase.execute(body, cart);
-    const foundCart = await this.findCartByAccountIdUseCase.execute(accountId);
-    if (foundCart) {
-      return new ReturnCartDto(foundCart);
-    }
     return new ReturnCartDto(cart);
   }
 }
