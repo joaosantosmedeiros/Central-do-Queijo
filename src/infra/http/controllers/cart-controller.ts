@@ -6,6 +6,7 @@ import {
   HttpCode,
   Param,
   Post,
+  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -22,6 +23,7 @@ import { FindCartByAccountIdUseCase } from '@application/usecases/cart-usecases/
 import { ClearCartUseCase } from '@application/usecases/cart-usecases/clear-cart-usecase';
 import { DeleteCartProductUseCase } from '@application/usecases/cart-product-usecases/delete-cart-product-usecase';
 import { FindCartProductUseCase } from '@application/usecases/cart-product-usecases/find-cart-product-usecase';
+import { UpdateCartProductUseCase } from '@application/usecases/cart-product-usecases/update-cart-product-usecase';
 
 @Roles(UserType.User)
 @Controller('cart')
@@ -32,6 +34,7 @@ export class CartController {
     private readonly findCartProductUseCase: FindCartProductUseCase,
     private readonly createCartUseCase: CreateCartUseCase,
     private readonly createCartProductUseCase: CreateCartProductUseCase,
+    private readonly updateCartProductUseCase: UpdateCartProductUseCase,
     private readonly clearCartUseCase: ClearCartUseCase,
     private readonly deleteCartProductUseCase: DeleteCartProductUseCase,
   ) {}
@@ -58,6 +61,30 @@ export class CartController {
     }
 
     await this.createCartProductUseCase.execute(body, cart);
+    return new ReturnCartDto(cart);
+  }
+
+  @Put()
+  async updateProductInCart(
+    @Body() body: SaveCartBody,
+    @UserId() accountId: string,
+  ): Promise<ReturnCartDto> {
+    const cart = await this.findCartByAccountIdUseCase.execute(accountId);
+    if (!cart) {
+      throw new EntityNotFoundException('Cart');
+    }
+
+    const cartProduct = await this.findCartProductUseCase.execute(
+      body.productId,
+      cart.id,
+    );
+    if (!cartProduct || !cart.cartProduct) {
+      throw new EntityNotFoundException('CartProduct');
+    }
+
+    await this.updateCartProductUseCase.execute(body.amount, cartProduct.id);
+
+    cart.cartProduct[0].amount = body.amount;
     return new ReturnCartDto(cart);
   }
 

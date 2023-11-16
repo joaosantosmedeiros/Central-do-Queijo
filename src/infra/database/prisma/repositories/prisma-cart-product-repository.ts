@@ -35,6 +35,7 @@ export class PrismaCartProductRepository implements CartProductRepository {
         id,
       },
       data: { amount: newAmount },
+      include: { product: true },
     });
 
     return PrismaCartProductMapper.toDomain(cartProduct);
