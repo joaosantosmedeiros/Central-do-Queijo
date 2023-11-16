@@ -6,17 +6,11 @@ export interface CreateCategoryRequest {
   name: string;
 }
 
-export interface CreateCategoryResponse {
-  category: Category;
-}
-
 @Injectable()
 export class CreateCategoryUseCase {
   constructor(private categoryRepository: CategoryRepository) {}
 
-  async execute(
-    request: CreateCategoryRequest,
-  ): Promise<CreateCategoryResponse> {
+  async execute(request: CreateCategoryRequest): Promise<Category> {
     const { name } = request;
 
     const category = new Category({
@@ -25,6 +19,6 @@ export class CreateCategoryUseCase {
 
     await this.categoryRepository.create(category);
 
-    return { category };
+    return category;
   }
 }

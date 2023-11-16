@@ -53,7 +53,7 @@ export class CartController {
     @Body() body: SaveCartBody,
     @UserId() accountId: string,
   ): Promise<ReturnCartDto> {
-    const { cart } = await this.createCartUseCase.execute(accountId);
+    const cart = await this.createCartUseCase.execute(accountId);
     const product = await this.findProductByIdUseCase.execute(body.productId);
 
     if (!product) {
@@ -82,7 +82,10 @@ export class CartController {
       throw new EntityNotFoundException('CartProduct');
     }
 
-    await this.updateCartProductUseCase.execute(body.amount, cartProduct.id);
+    await this.updateCartProductUseCase.execute({
+      amount: body.amount,
+      cartProductId: cartProduct.id,
+    });
 
     cart.cartProduct[0].amount = body.amount;
     return new ReturnCartDto(cart);

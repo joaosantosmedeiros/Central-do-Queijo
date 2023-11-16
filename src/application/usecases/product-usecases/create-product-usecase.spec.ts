@@ -8,7 +8,7 @@ describe('CreateProduct Use Case', () => {
 
     productRepository.categoriesIds.push('any_id');
 
-    const { product } = await createProductUseCase.execute({
+    const product = await createProductUseCase.execute({
       name: 'any_name',
       categoryId: 'any_id',
       price: 1,

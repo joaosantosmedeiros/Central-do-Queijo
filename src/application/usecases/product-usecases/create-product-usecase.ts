@@ -9,15 +9,11 @@ export interface CreateProductRequest {
   image: string;
 }
 
-export interface CreateProductResponse {
-  product: Product;
-}
-
 @Injectable()
 export class CreateProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 
-  async execute(request: CreateProductRequest): Promise<CreateProductResponse> {
+  async execute(request: CreateProductRequest): Promise<Product> {
     const { name, categoryId, price, image } = request;
 
     const product = new Product({
@@ -29,6 +25,6 @@ export class CreateProductUseCase {
 
     await this.productRepository.create(product);
 
-    return { product };
+    return product;
   }
 }

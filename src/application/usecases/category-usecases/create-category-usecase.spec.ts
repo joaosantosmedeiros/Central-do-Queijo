@@ -7,7 +7,7 @@ describe('Create Category Use Case', () => {
     const categoryRepository = new InMemoryCategoryRepository();
     const createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);
 
-    const { category } = await createCategoryUseCase.execute({
+    const category = await createCategoryUseCase.execute({
       name: 'any_name',
     });
 

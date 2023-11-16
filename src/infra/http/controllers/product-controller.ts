@@ -55,7 +55,7 @@ export class ProductController {
   @Post()
   async create(@Body() body: CreateProductBody): Promise<Product | undefined> {
     try {
-      const { product } = await this.createProductUseCase.execute(body);
+      const product = await this.createProductUseCase.execute(body);
 
       return product;
     } catch (err: any) {
@@ -71,7 +71,7 @@ export class ProductController {
   async update(
     @Param('id') id: string,
     @Body() body: UpdateProductBody,
-  ): Promise<Product | undefined> {
+  ): Promise<ReturnProductDto | undefined> {
     const product = await this.findProductByIdUseCase.execute(id);
     if (!product) {
       throw new EntityNotFoundException('Product');
@@ -86,7 +86,7 @@ export class ProductController {
         price: body.price,
       });
 
-      return product;
+      return new ReturnProductDto(product);
     } catch (err: any) {
       console.log(err);
       if (err.code === 'P2003') {

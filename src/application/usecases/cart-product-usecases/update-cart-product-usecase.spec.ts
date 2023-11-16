@@ -16,7 +16,10 @@ describe('UpdateCartProductUseCase', () => {
       ),
     );
 
-    await updateCartProductUseCase.execute(4, 'any_id');
+    await updateCartProductUseCase.execute({
+      amount: 4,
+      cartProductId: 'any_id',
+    });
     expect(inMemoryCartProductRepository.cartProducts[0].amount).toBe(4);
   });
 
@@ -27,7 +30,11 @@ describe('UpdateCartProductUseCase', () => {
     );
 
     expect(
-      async () => await updateCartProductUseCase.execute(4, 'fake_id'),
+      async () =>
+        await updateCartProductUseCase.execute({
+          amount: 4,
+          cartProductId: 'fake_id',
+        }),
     ).rejects.toThrow(Error);
   });
 });

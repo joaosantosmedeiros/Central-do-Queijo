@@ -44,7 +44,7 @@ export class AccountController {
   async listAll() {
     const accounts = await this.listAllAccountsUseCase.execute();
 
-    return { accounts };
+    return accounts;
   }
 
   @Roles(UserType.User, UserType.Admin)
@@ -77,13 +77,13 @@ export class AccountController {
     const hashedPassword = await bcrypt.hash(password, saltOrRounds);
 
     try {
-      const { account } = await this.createAccountUseCase.execute({
+      const account = await this.createAccountUseCase.execute({
         name,
         email,
         password: hashedPassword,
       });
 
-      return { account };
+      return account;
     } catch (err: any) {
       if (err.code === 'P2002') {
         throw new EmailInUseException();

@@ -1,3 +1,4 @@
+import { Product } from '@application/entities/product/product';
 import { ProductRepository } from '@application/repositories/product-repository';
 import { Injectable } from '@nestjs/common';
 
@@ -13,7 +14,7 @@ export interface UpdateProductRequest {
 export class UpdateProductUseCase {
   constructor(private readonly productRepository: ProductRepository) {}
 
-  async execute(request: UpdateProductRequest) {
+  async execute(request: UpdateProductRequest): Promise<Product> {
     return this.productRepository.update(request.id, {
       name: request.name,
       categoryId: request.categoryId,

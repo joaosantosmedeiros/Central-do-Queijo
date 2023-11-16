@@ -7,18 +7,11 @@ export interface CreateCartRequest {
   amount: number;
 }
 
-export interface CreateCartResponse {
-  cart: Cart;
-}
-
 @Injectable()
 export class CreateCartUseCase {
   constructor(private cartRepository: CartRepository) {}
 
-  async execute(
-    accountId: string,
-    withRelations?: boolean,
-  ): Promise<CreateCartResponse> {
+  async execute(accountId: string, withRelations?: boolean): Promise<Cart> {
     const cart = await this.cartRepository.findCartByUserId(
       accountId,
       withRelations,
@@ -28,9 +21,9 @@ export class CreateCartUseCase {
       const createdCart = await this.cartRepository.create(
         new Cart({ accountId }),
       );
-      return { cart: createdCart };
+      return createdCart;
     }
 
-    return { cart };
+    return cart;
   }
 }

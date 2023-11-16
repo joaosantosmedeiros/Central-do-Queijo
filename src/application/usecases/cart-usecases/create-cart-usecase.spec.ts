@@ -17,7 +17,7 @@ describe('CreateCartUseCase', () => {
     const createCartUseCase = new CreateCartUseCase(cartRepository);
     cartRepository.carts.push(new Cart({ accountId: 'any_account_id' }));
 
-    const { cart } = await createCartUseCase.execute('any_account_id');
+    const cart = await createCartUseCase.execute('any_account_id');
 
     expect(cart).toBeTruthy();
     expect(cart).toEqual(cartRepository.carts[0]);

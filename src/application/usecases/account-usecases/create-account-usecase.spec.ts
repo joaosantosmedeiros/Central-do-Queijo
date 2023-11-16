@@ -7,7 +7,7 @@ describe('Create Account Use Case', () => {
     const accountsRepository = new InMemoryAccountRepository();
     const createAccountUseCase = new CreateAccountUseCase(accountsRepository);
 
-    const { account } = await createAccountUseCase.execute({
+    const account = await createAccountUseCase.execute({
       email: 'any_mail@mail.com',
       password: 'any_password',
       name: 'any_name',

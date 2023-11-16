@@ -57,9 +57,9 @@ export class CategoryController {
   @Post()
   async create(@Body() body: CreateCategoryBody) {
     try {
-      const { category } = await this.createCategoryUseCase.execute(body);
+      const category = await this.createCategoryUseCase.execute(body);
 
-      return { category };
+      return category;
     } catch (err: any) {
       if (err.code === 'P2002') {
         throw new CategoryAlreadyExistsException();

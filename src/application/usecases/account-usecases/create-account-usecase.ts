@@ -8,15 +8,11 @@ export interface CreateAccountRequest {
   password: string;
 }
 
-export interface CreateAccountResponse {
-  account: Account;
-}
-
 @Injectable()
 export class CreateAccountUseCase {
   constructor(private accountRepository: AccountRepository) {}
 
-  async execute(request: CreateAccountRequest): Promise<CreateAccountResponse> {
+  async execute(request: CreateAccountRequest): Promise<Account> {
     const { name, email, password } = request;
 
     const account = new Account({
@@ -27,6 +23,6 @@ export class CreateAccountUseCase {
 
     await this.accountRepository.create(account);
 
-    return { account };
+    return account;
   }
 }
