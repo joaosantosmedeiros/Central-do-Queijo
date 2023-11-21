@@ -20,6 +20,7 @@ model Account {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Cart      Cart[]
+  Order     Order[]
 }
 
 model Category {
@@ -64,7 +65,7 @@ model CartProduct {
 }
 
 model Payment {
-  id          String @id
+  id          String        @id
   status      PaymentStatus
   price       Float
   discount    Int
@@ -73,9 +74,21 @@ model Payment {
   paymentDate DateTime?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+  Order       Order[]
 }
 
 enum PaymentStatus {
   DONE
   PENDING
+}
+
+model Order {
+  id        String   @id
+  accountId String
+  account   Account  @relation(fields: [accountId], references: [id])
+  date      DateTime @default(now())
+  paymentId String
+  payment   Payment  @relation(fields: [paymentId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
