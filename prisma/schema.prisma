@@ -32,15 +32,16 @@ model Category {
 }
 
 model Product {
-  id          String        @id
-  name        String
-  category    Category      @relation(fields: [categoryId], references: [id])
-  categoryId  String
-  price       Float
-  image       String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  CartProduct CartProduct[]
+  id           String         @id
+  name         String
+  category     Category       @relation(fields: [categoryId], references: [id])
+  categoryId   String
+  price        Float
+  image        String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  CartProduct  CartProduct[]
+  OrderProduct OrderProduct[]
 }
 
 model Cart {
@@ -83,12 +84,25 @@ enum PaymentStatus {
 }
 
 model Order {
-  id        String   @id
-  accountId String
-  account   Account  @relation(fields: [accountId], references: [id])
-  date      DateTime @default(now())
-  paymentId String
-  payment   Payment  @relation(fields: [paymentId], references: [id])
+  id           String         @id
+  accountId    String
+  account      Account        @relation(fields: [accountId], references: [id])
+  date         DateTime       @default(now())
+  paymentId    String
+  payment      Payment        @relation(fields: [paymentId], references: [id])
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  OrderProduct OrderProduct[]
+}
+
+model OrderProduct {
+  id        String   @id @default(uuid())
+  orderId   String
+  productId String
+  amount    Int
+  price     Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }
