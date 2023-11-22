@@ -38,6 +38,9 @@ export class Payment {
       finalPrice: props.price * (1 - props.discount / 100),
       status: props.status ?? PaymentStatus.PENDING,
     };
+    if (this.finalPrice > this.price || this.discount < 0) {
+      throw new Error("Discount can't be negative");
+    }
   }
 
   public get id() {

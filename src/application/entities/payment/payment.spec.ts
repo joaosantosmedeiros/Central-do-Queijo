@@ -38,4 +38,12 @@ describe('Payment', () => {
       expect(payment.pay()).rejects.toThrow();
     };
   });
+
+  it('should not be able to create a payment with a negative discount', () => {
+    async () => {
+      expect(
+        new Payment({ code: 'any_code', discount: -1, price: 100 }),
+      ).rejects.toThrow();
+    };
+  });
 });
