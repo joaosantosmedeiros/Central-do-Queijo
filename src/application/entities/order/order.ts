@@ -42,7 +42,7 @@ export class Order {
   }
 
   public get paymentId() {
-    return this.props.accountId;
+    return this.props.paymentId;
   }
 
   public get createdAt() {
