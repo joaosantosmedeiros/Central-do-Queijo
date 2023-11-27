@@ -10,7 +10,7 @@ describe('Update Product UseCase', () => {
     );
     const expected = 'updated_name';
 
-    inMemoryProductRepository.categoriesIds = ['any_id', 'updated_id'];
+    inMemoryProductRepository.categoriesIds = ['any_category_id', 'updated_id'];
     await inMemoryProductRepository.create(makeProduct());
     const product = inMemoryProductRepository.products[0];
 
@@ -51,7 +51,7 @@ describe('Update Product UseCase', () => {
       inMemoryProductRepository,
     );
 
-    inMemoryProductRepository.categoriesIds = ['any_id'];
+    inMemoryProductRepository.categoriesIds = ['any_category_id'];
     await inMemoryProductRepository.create(makeProduct());
 
     const product = inMemoryProductRepository.products[0];

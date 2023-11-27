@@ -9,14 +9,14 @@ describe('Find Product By Id', () => {
       inMemoryProductRepository,
     );
 
-    inMemoryProductRepository.categoriesIds = ['any_id'];
+    inMemoryProductRepository.categoriesIds = ['any_category_id'];
     await inMemoryProductRepository.create(makeProduct());
     await inMemoryProductRepository.create(makeProduct());
 
     const products = await inMemoryProductRepository.list();
     const product = await findProductByIdUseCase.execute(products[1].id);
 
-    expect(product).toBe(products[1]);
+    expect(product).toEqual(products[1]);
   });
 
   it('should return null if no product is found', async () => {

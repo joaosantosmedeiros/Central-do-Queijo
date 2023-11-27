@@ -9,7 +9,7 @@ describe('Find Product By Name', () => {
       inMemoryProductRepository,
     );
 
-    inMemoryProductRepository.categoriesIds = ['any_id'];
+    inMemoryProductRepository.categoriesIds = ['any_category_id'];
     await inMemoryProductRepository.create(makeProduct());
     await inMemoryProductRepository.create(makeProduct('product_2'));
 

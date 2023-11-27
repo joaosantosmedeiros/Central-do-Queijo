@@ -10,7 +10,7 @@ describe('List Products Use Case', () => {
     );
     const expected = 2;
 
-    inMemoryProductRepository.categoriesIds = ['any_id'];
+    inMemoryProductRepository.categoriesIds = ['any_category_id'];
 
     inMemoryProductRepository.create(makeProduct());
     inMemoryProductRepository.create(makeProduct());

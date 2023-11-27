@@ -9,7 +9,7 @@ describe('Delete Product UseCase', () => {
       inMemoryProductsRepository,
     );
 
-    inMemoryProductsRepository.categoriesIds = ['any_id'];
+    inMemoryProductsRepository.categoriesIds = ['any_category_id'];
     inMemoryProductsRepository.create(makeProduct());
     const product = inMemoryProductsRepository.products[0];
 
