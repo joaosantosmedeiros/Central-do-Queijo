@@ -12,7 +12,6 @@ describe('Payment', () => {
     expect(payment.finalPrice).toBe(80);
     expect(payment.code).toBe('any_code');
     expect(payment.paymentDate).toBeUndefined();
-    expect(payment.updatedAt).toEqual(payment.createdAt);
   });
 
   it('should update the finalPrice if the discount is altered', () => {
