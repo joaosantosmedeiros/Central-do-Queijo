@@ -39,6 +39,7 @@ import { CreateOrderUseCase } from '@application/usecases/order-usecases/create-
 import { CreatePaymentUseCase } from '@application/usecases/payment-usecases/create-payment-usecase';
 import { CreateOrderProductUseCase } from '@application/usecases/order-product-usecases/create-order-product-usecase';
 import { CreateOrderProductUsingCartUseCase } from '@application/usecases/order-product-usecases/create-order-product-using-cart';
+import { FindOrderByAccountUseCase } from '@application/usecases/order-usecases/find-order-by-account-usecase';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
@@ -81,6 +82,7 @@ import { CreateOrderProductUsingCartUseCase } from '@application/usecases/order-
     CreatePaymentUseCase,
     CreateOrderProductUseCase,
     CreateOrderProductUsingCartUseCase,
+    FindOrderByAccountUseCase,
   ],
 })
 export class HttpModule {}

@@ -16,6 +16,7 @@ import { Order } from '@application/entities/order/order';
 import { ListProductsUseCase } from '@application/usecases/product-usecases';
 import { CreateOrderProductUsingCartUseCase } from '@application/usecases/order-product-usecases/create-order-product-using-cart';
 import { ClearCartUseCase } from '@application/usecases/cart-usecases/clear-cart-usecase';
+import { FindOrderByAccountUseCase } from '@application/usecases/order-usecases/find-order-by-account-usecase';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 
@@ -29,7 +30,13 @@ export class OrderController {
     private readonly createOrderProductUsingCartUseCase: CreateOrderProductUsingCartUseCase,
     private readonly listProductsUseCase: ListProductsUseCase,
     private readonly clearCartUseCase: ClearCartUseCase,
+    private readonly findOrdersByAccountUseCase: FindOrderByAccountUseCase,
   ) {}
+
+  @Get()
+  async list(@UserId() accountId: string) {
+    return this.findOrdersByAccountUseCase.execute(accountId);
+  }
 
   @Post('cart')
   @UsePipes(ValidationPipe)
