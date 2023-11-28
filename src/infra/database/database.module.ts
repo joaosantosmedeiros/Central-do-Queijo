@@ -10,6 +10,12 @@ import { CartRepository } from '@application/repositories/cart-repository';
 import { PrismaCartRepository } from './prisma/repositories/prisma-cart-repository';
 import { CartProductRepository } from '@application/repositories/cart-product-repository';
 import { PrismaCartProductRepository } from './prisma/repositories/prisma-cart-product-repository';
+import { OrderRepository } from '@application/repositories/order-repository';
+import { PrismaOrderRepository } from './prisma/repositories/prisma-order-repository';
+import { PaymentRepository } from '@application/repositories/payment-repository';
+import { PrismaPaymentRepository } from './prisma/repositories/prisma-payment-repository';
+import { OrderProductRepository } from '@application/repositories/order-product-repository';
+import { PrismaOrderProductRepository } from './prisma/repositories/prisma-order-product-repository';
 
 @Module({
   providers: [
@@ -34,6 +40,18 @@ import { PrismaCartProductRepository } from './prisma/repositories/prisma-cart-p
       provide: CartProductRepository,
       useClass: PrismaCartProductRepository,
     },
+    {
+      provide: OrderRepository,
+      useClass: PrismaOrderRepository,
+    },
+    {
+      provide: PaymentRepository,
+      useClass: PrismaPaymentRepository,
+    },
+    {
+      provide: OrderProductRepository,
+      useClass: PrismaOrderProductRepository,
+    },
   ],
   exports: [
     AccountRepository,
@@ -41,6 +59,9 @@ import { PrismaCartProductRepository } from './prisma/repositories/prisma-cart-p
     ProductRepository,
     CartRepository,
     CartProductRepository,
+    OrderRepository,
+    PaymentRepository,
+    OrderProductRepository,
   ],
 })
 export class DatabaseModule {}

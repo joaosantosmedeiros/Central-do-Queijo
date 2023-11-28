@@ -1,0 +1,78 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { CreateOrderBody } from '../dto/body/create-order-body';
+import { CreateOrderUseCase } from '@application/usecases/order-usecases/create-order-usecase';
+import { UserId } from '../decorators/user-id.decorator';
+import { CreatePaymentUseCase } from '@application/usecases/payment-usecases/create-payment-usecase';
+import { FindCartByAccountIdUseCase } from '@application/usecases/cart-usecases/find-cart-by-account-id-usecase';
+import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
+import { Order } from '@application/entities/order/order';
+import { ListProductsUseCase } from '@application/usecases/product-usecases';
+import { CreateOrderProductUsingCartUseCase } from '@application/usecases/order-product-usecases/create-order-product-using-cart';
+import { ClearCartUseCase } from '@application/usecases/cart-usecases/clear-cart-usecase';
+import { Roles } from '../decorators/roles.decorator';
+import { UserType } from 'src/enums/user-type.enum';
+
+@Roles(UserType.User)
+@Controller('order')
+export class OrderController {
+  constructor(
+    private readonly createOrderUseCase: CreateOrderUseCase,
+    private readonly createPaymentUseCase: CreatePaymentUseCase,
+    private readonly findCartByAccountIdUseCase: FindCartByAccountIdUseCase,
+    private readonly createOrderProductUsingCartUseCase: CreateOrderProductUsingCartUseCase,
+    private readonly listProductsUseCase: ListProductsUseCase,
+    private readonly clearCartUseCase: ClearCartUseCase,
+  ) {}
+
+  @Post('cart')
+  @UsePipes(ValidationPipe)
+  async create(
+    @Body() body: CreateOrderBody,
+    @UserId() accountId: string,
+  ): Promise<Order> {
+    const cart = await this.findCartByAccountIdUseCase.execute(accountId);
+    if (!cart) {
+      throw new EntityNotFoundException('Cart');
+    }
+    if (!cart.cartProduct) {
+      throw new EntityNotFoundException('CartProduct');
+    }
+    const products = await this.listProductsUseCase.execute(
+      cart.cartProduct.map((cartProduct) => cartProduct.productId),
+    );
+    if (!products || products.length == 0) {
+      throw new EntityNotFoundException('Products');
+    }
+
+    const payment = await this.createPaymentUseCase.execute(
+      {
+        code: body.code,
+        discount: body.discount ?? 0,
+      },
+      products,
+      cart,
+    );
+
+    const order = await this.createOrderUseCase.execute({
+      accountId,
+      paymentId: payment.id,
+    });
+
+    await this.createOrderProductUsingCartUseCase.execute(
+      cart,
+      order.id,
+      products,
+    );
+
+    await this.clearCartUseCase.execute(cart);
+
+    return order;
+  }
+}
