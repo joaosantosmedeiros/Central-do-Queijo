@@ -14,8 +14,6 @@ describe('CreateOrderUseCase', () => {
       paymentId,
     });
 
-    console.log(order);
-
     expect(order.accountId).toBe(accountId);
     expect(order.paymentId).toBe(paymentId);
   });

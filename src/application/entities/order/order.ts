@@ -1,5 +1,6 @@
 import { Replace } from '@helpers/replace';
 import { randomUUID } from 'crypto';
+import { OrderProduct } from '../order-product/order-product';
 
 export interface OrderProps {
   accountId: string;
@@ -7,6 +8,7 @@ export interface OrderProps {
   paymentId: string;
   createdAt: Date;
   updatedAt: Date;
+  OrderProduct?: OrderProduct[];
 }
 
 export class Order {
