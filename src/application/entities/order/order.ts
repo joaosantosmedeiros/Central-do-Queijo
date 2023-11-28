@@ -47,6 +47,10 @@ export class Order {
     return this.props.paymentId;
   }
 
+  public get OrderProduct() {
+    return this.props.OrderProduct;
+  }
+
   public get createdAt() {
     return this.props.createdAt;
   }

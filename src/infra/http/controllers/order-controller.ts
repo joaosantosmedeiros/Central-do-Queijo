@@ -19,6 +19,7 @@ import { ClearCartUseCase } from '@application/usecases/cart-usecases/clear-cart
 import { FindOrderByAccountUseCase } from '@application/usecases/order-usecases/find-order-by-account-usecase';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
+import { ReturnOrderDto } from '../dto/return/return-order-dto';
 
 @Roles(UserType.User)
 @Controller('order')
@@ -34,8 +35,10 @@ export class OrderController {
   ) {}
 
   @Get()
-  async list(@UserId() accountId: string) {
-    return this.findOrdersByAccountUseCase.execute(accountId);
+  async list(@UserId() accountId: string): Promise<ReturnOrderDto[]> {
+    const orders = await this.findOrdersByAccountUseCase.execute(accountId);
+
+    return orders.map((order) => new ReturnOrderDto(order));
   }
 
   @Post('cart')
