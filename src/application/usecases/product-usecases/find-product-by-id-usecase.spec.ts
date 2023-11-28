@@ -1,32 +1,30 @@
 import { makeProduct } from '@test/factories/product-factory';
 import { InMemoryProductsRepository } from '@test/repositories/in-memory-products-repository';
 import { FindProductByIdUseCase } from './find-product-by-id-usecase';
+import { EntityNotFoundException } from '@infra/http/exceptions/entity-not-found-exception';
 
 describe('Find Product By Id', () => {
   it('should find an existing product', async () => {
-    const inMemoryProductRepository = new InMemoryProductsRepository();
-    const findProductByIdUseCase = new FindProductByIdUseCase(
-      inMemoryProductRepository,
-    );
+    const productRepository = new InMemoryProductsRepository();
+    const findProductById = new FindProductByIdUseCase(productRepository);
 
-    inMemoryProductRepository.categoriesIds = ['any_category_id'];
-    await inMemoryProductRepository.create(makeProduct());
-    await inMemoryProductRepository.create(makeProduct());
+    await productRepository.create(makeProduct());
+    await productRepository.create(makeProduct());
 
-    const products = await inMemoryProductRepository.list();
-    const product = await findProductByIdUseCase.execute(products[1].id);
+    const products = await productRepository.list();
+    const product = await findProductById.execute(products[1].id);
 
     expect(product).toEqual(products[1]);
   });
 
-  it('should return null if no product is found', async () => {
-    const inMemoryProductRepository = new InMemoryProductsRepository();
-    const findProductByIdUseCase = new FindProductByIdUseCase(
-      inMemoryProductRepository,
-    );
+  it('should throw if no product is found', async () => {
+    const productRepository = new InMemoryProductsRepository();
+    const findProductById = new FindProductByIdUseCase(productRepository);
 
-    const product = await findProductByIdUseCase.execute('fake_id');
-
-    expect(product).toBeNull();
+    async () => {
+      expect(await findProductById.execute('fake_id')).rejects.toThrow(
+        EntityNotFoundException,
+      );
+    };
   });
 });
