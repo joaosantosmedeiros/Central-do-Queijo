@@ -4,16 +4,24 @@ import {
   UpdateAccountUseCase,
 } from './update-account-usecase';
 import { makeAccount } from '@test/factories/account-factory';
-import { EmailInUseError } from '../errors/email-in-use-error';
+import { FindAccountByEmailUseCase } from './find-account-by-email-usecase';
+import { EmailInUseException } from '@infra/http/exceptions/email-in-use-exception';
+
+const makeSut = () => {
+  const accountRepository = new InMemoryAccountRepository();
+  const updateAccount = new UpdateAccountUseCase(
+    accountRepository,
+    new FindAccountByEmailUseCase(accountRepository),
+  );
+
+  return { updateAccount, accountRepository };
+};
 
 describe('UpdateAccountUseCase', () => {
   it('should update an account correctly', async () => {
-    const inMemoryAccountRepository = new InMemoryAccountRepository();
-    const updateAccountUseCase = new UpdateAccountUseCase(
-      inMemoryAccountRepository,
-    );
+    const { accountRepository, updateAccount } = makeSut();
 
-    await inMemoryAccountRepository.create(makeAccount());
+    await accountRepository.create(makeAccount());
 
     const request: UpdateAccountRequest = {
       email: 'any_mail@mail.com',
@@ -24,7 +32,7 @@ describe('UpdateAccountUseCase', () => {
       },
     };
 
-    const account = await updateAccountUseCase.execute(request);
+    const account = await updateAccount.execute(request);
 
     expect(account.email).toBe('updated_email@mail.com');
     expect(account.name).toBe('updated_name');
@@ -32,30 +40,22 @@ describe('UpdateAccountUseCase', () => {
   });
 
   it('should throw an erorr if an used email is passed', async () => {
-    const inMemoryAccountRepository = new InMemoryAccountRepository();
-    const updateAccountUseCase = new UpdateAccountUseCase(
-      inMemoryAccountRepository,
-    );
+    const { accountRepository, updateAccount } = makeSut();
 
-    await inMemoryAccountRepository.create(makeAccount());
-    await inMemoryAccountRepository.create(
-      makeAccount('another_mail@mail.com'),
-    );
+    await accountRepository.create(makeAccount());
+    await accountRepository.create(makeAccount('another_mail@mail.com'));
 
     expect(
       async () =>
-        await updateAccountUseCase.execute({
+        await updateAccount.execute({
           email: 'another_mail@mail.com',
           props: { newEmail: 'any_mail@mail.com' },
         }),
-    ).rejects.toThrow(EmailInUseError);
+    ).rejects.toThrow(EmailInUseException);
   });
 
   it('should throw an error if an invalid email is passed', async () => {
-    const inMemoryAccountRepository = new InMemoryAccountRepository();
-    const updateAccountUseCase = new UpdateAccountUseCase(
-      inMemoryAccountRepository,
-    );
+    const { updateAccount } = makeSut();
 
     const request: UpdateAccountRequest = {
       email: 'any_mail@mail.com',
@@ -66,8 +66,6 @@ describe('UpdateAccountUseCase', () => {
       },
     };
 
-    expect(
-      async () => await updateAccountUseCase.execute(request),
-    ).rejects.toThrow();
+    expect(async () => await updateAccount.execute(request)).rejects.toThrow();
   });
 });
