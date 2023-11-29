@@ -4,27 +4,22 @@ import { DeleteProductUseCase } from './delete-product-usecase';
 
 describe('Delete Product UseCase', () => {
   it('should delete an product correctly', async () => {
-    const inMemoryProductsRepository = new InMemoryProductsRepository();
-    const deleteProductUseCase = new DeleteProductUseCase(
-      inMemoryProductsRepository,
-    );
+    const productRepository = new InMemoryProductsRepository();
+    const deleteProduct = new DeleteProductUseCase(productRepository);
 
-    inMemoryProductsRepository.categoriesIds = ['any_category_id'];
-    inMemoryProductsRepository.create(makeProduct());
-    const product = inMemoryProductsRepository.products[0];
+    productRepository.create(makeProduct());
+    const product = productRepository.products[0];
 
-    await deleteProductUseCase.execute(product.id);
-    expect(inMemoryProductsRepository.products.length).toBe(0);
+    await deleteProduct.execute(product.id);
+    expect(productRepository.products.length).toBe(0);
   });
 
   it('should not delete an unexistent product', async () => {
-    const inMemoryProductsRepository = new InMemoryProductsRepository();
-    const deleteProductUseCase = new DeleteProductUseCase(
-      inMemoryProductsRepository,
-    );
+    const productRepository = new InMemoryProductsRepository();
+    const deleteProduct = new DeleteProductUseCase(productRepository);
 
-    expect(
-      async () => await deleteProductUseCase.execute('fake_id'),
-    ).rejects.toThrow(Error);
+    expect(async () => await deleteProduct.execute('fake_id')).rejects.toThrow(
+      Error,
+    );
   });
 });
