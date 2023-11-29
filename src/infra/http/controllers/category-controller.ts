@@ -10,13 +10,10 @@ import {
   Put,
 } from '@nestjs/common';
 import { CreateCategoryBody } from '../dto/body/create-category-body';
-import { CategoryAlreadyExistsException } from '../exceptions/category-already-exists-exception';
-import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 import {
   CreateCategoryUseCase,
   DeleteCategoryUseCase,
   FindCategoryByIdUseCase,
-  FindCategoryByNameUseCase,
   ListCategoriesUseCase,
   UpdateCategoryUseCase,
 } from '@application/usecases/category-usecases';
@@ -30,41 +27,24 @@ export class CategoryController {
     private createCategoryUseCase: CreateCategoryUseCase,
     private listAllCategoriesUseCase: ListCategoriesUseCase,
     private findCategoryByIdUseCase: FindCategoryByIdUseCase,
-    private findCategoryByNameUseCase: FindCategoryByNameUseCase,
     private deleteCategoryByIdUseCase: DeleteCategoryUseCase,
     private updateCategoryUseCase: UpdateCategoryUseCase,
   ) {}
 
   @Get()
   async listAll(): Promise<Category[]> {
-    const categories = await this.listAllCategoriesUseCase.execute();
-
-    return categories;
+    return this.listAllCategoriesUseCase.execute();
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string): Promise<Category | null> {
-    const category = await this.findCategoryByIdUseCase.execute(id);
-
-    if (!category) {
-      throw new EntityNotFoundException('Category');
-    }
-
-    return category;
+  async findById(@Param('id') id: string): Promise<Category> {
+    return this.findCategoryByIdUseCase.execute(id);
   }
 
   @Roles(UserType.Admin)
   @Post()
-  async create(@Body() body: CreateCategoryBody) {
-    try {
-      const category = await this.createCategoryUseCase.execute(body);
-
-      return category;
-    } catch (err: any) {
-      if (err.code === 'P2002') {
-        throw new CategoryAlreadyExistsException();
-      }
-    }
+  async create(@Body() body: CreateCategoryBody): Promise<Category> {
+    return this.createCategoryUseCase.execute(body);
   }
 
   @Roles(UserType.Admin)
@@ -73,18 +53,7 @@ export class CategoryController {
     @Param('id') id: string,
     @Body() body: CreateCategoryBody,
   ): Promise<Category> {
-    const category = await this.findCategoryByIdUseCase.execute(id);
-    if (!category) {
-      throw new EntityNotFoundException('Category');
-    }
-
-    const categoryExists = await this.findCategoryByNameUseCase.execute(
-      body.name,
-    );
-
-    if (categoryExists) {
-      throw new CategoryAlreadyExistsException();
-    }
+    await this.findCategoryByIdUseCase.execute(id);
 
     return this.updateCategoryUseCase.execute({
       id,
@@ -96,10 +65,7 @@ export class CategoryController {
   @Delete(':id')
   @HttpCode(204)
   async delete(@Param('id') id: string): Promise<void> {
-    const category = await this.findCategoryByIdUseCase.execute(id);
-    if (!category) {
-      throw new EntityNotFoundException('Category');
-    }
+    await this.findCategoryByIdUseCase.execute(id);
 
     try {
       await this.deleteCategoryByIdUseCase.execute(id);
