@@ -4,26 +4,22 @@ import { InMemoryCategoryRepository } from '@test/repositories/in-memory-categor
 
 describe('DeleteCategoryUseCase', () => {
   it('should delete an category correctly', async () => {
-    const inMemoryCategoryRepository = new InMemoryCategoryRepository();
-    const deleteCategoryUseCase = new DeleteCategoryUseCase(
-      inMemoryCategoryRepository,
-    );
+    const categoryRepository = new InMemoryCategoryRepository();
+    const deleteCategory = new DeleteCategoryUseCase(categoryRepository);
 
-    inMemoryCategoryRepository.create(makeCategory());
-    const category = inMemoryCategoryRepository.categories[0];
+    categoryRepository.create(makeCategory());
+    const category = categoryRepository.categories[0];
 
-    await deleteCategoryUseCase.execute(category.id);
-    expect(inMemoryCategoryRepository.categories.length).toBe(0);
+    await deleteCategory.execute(category.id);
+    expect(categoryRepository.categories.length).toBe(0);
   });
 
   it('should not delete an unexistent category', async () => {
-    const inMemoryCategoryRepository = new InMemoryCategoryRepository();
-    const deleteCategoryUseCase = new DeleteCategoryUseCase(
-      inMemoryCategoryRepository,
-    );
+    const categoryRepository = new InMemoryCategoryRepository();
+    const deleteCategory = new DeleteCategoryUseCase(categoryRepository);
 
-    expect(
-      async () => await deleteCategoryUseCase.execute('fake_id'),
-    ).rejects.toThrow(Error);
+    expect(async () => await deleteCategory.execute('fake_id')).rejects.toThrow(
+      Error,
+    );
   });
 });

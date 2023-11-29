@@ -4,29 +4,27 @@ import { makeCategory } from '@test/factories/category-factory';
 
 describe('FindCategoryByName', () => {
   it('should find an existing category', async () => {
-    const inMemoryCategoryRepository = new InMemoryCategoryRepository();
-    const findCategoryByNameUseCase = new FindCategoryByNameUseCase(
-      inMemoryCategoryRepository,
+    const categoryRepository = new InMemoryCategoryRepository();
+    const findCategoryByName = new FindCategoryByNameUseCase(
+      categoryRepository,
     );
 
-    await inMemoryCategoryRepository.create(makeCategory());
-    await inMemoryCategoryRepository.create(makeCategory('another_name'));
+    await categoryRepository.create(makeCategory());
+    await categoryRepository.create(makeCategory('another_name'));
 
-    const categories = await inMemoryCategoryRepository.list();
-    const category = await findCategoryByNameUseCase.execute(
-      categories[1].name,
-    );
+    const categories = await categoryRepository.list();
+    const category = await findCategoryByName.execute(categories[1].name);
 
     expect(category).toBe(categories[1]);
   });
 
   it('should return null if no category is found', async () => {
-    const inMemoryCategoryRepository = new InMemoryCategoryRepository();
-    const findCategoryByNameUseCase = new FindCategoryByNameUseCase(
-      inMemoryCategoryRepository,
+    const categoryRepository = new InMemoryCategoryRepository();
+    const findCategoryByName = new FindCategoryByNameUseCase(
+      categoryRepository,
     );
 
-    const category = await findCategoryByNameUseCase.execute('fake_name');
+    const category = await findCategoryByName.execute('fake_name');
 
     expect(category).toBeNull();
   });
