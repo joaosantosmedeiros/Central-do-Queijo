@@ -1,6 +1,7 @@
 import { InMemoryAccountRepository } from '@test/repositories/in-memory-accounts-repository';
 import { FindAccountByEmailUseCase } from './find-account-by-email-usecase';
 import { makeAccount } from '@test/factories/account-factory';
+import { EntityNotFoundException } from '@infra/http/exceptions/entity-not-found-exception';
 
 describe('FindAccountByEmailUseCase', () => {
   it('should find an account correctly', async () => {
@@ -17,7 +18,7 @@ describe('FindAccountByEmailUseCase', () => {
     expect(account).toBeTruthy();
   });
 
-  it('should return null if no account is found', async () => {
+  it('should throw if no account is found', async () => {
     const inMemoryAccountRepository = new InMemoryAccountRepository();
     const findAccountByEmailUseCase = new FindAccountByEmailUseCase(
       inMemoryAccountRepository,
@@ -25,8 +26,10 @@ describe('FindAccountByEmailUseCase', () => {
 
     const email = 'any_mail@mail.com';
 
-    const account = await findAccountByEmailUseCase.execute(email);
-
-    expect(account).toBeNull();
+    async () => {
+      expect(await findAccountByEmailUseCase.execute(email)).rejects.toThrow(
+        EntityNotFoundException,
+      );
+    };
   });
 });
