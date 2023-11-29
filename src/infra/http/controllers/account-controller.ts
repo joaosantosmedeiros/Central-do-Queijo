@@ -21,10 +21,8 @@ import * as bcrypt from 'bcrypt';
 
 import { CreateAccountBody } from '../dto/body/create-account-body';
 import { PasswordDontMatchException } from '../exceptions/password-dont-match-exception';
-import { EmailInUseException } from '../exceptions/email-in-use-exception';
 import { Account } from '@application/entities/account/account';
 import { UpdateAccountBody } from '../dto/body/update-account-body';
-import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 import { UserId } from '../decorators/user-id.decorator';
@@ -42,9 +40,7 @@ export class AccountController {
   @Roles(UserType.Admin)
   @Get()
   async listAll() {
-    const accounts = await this.listAllAccountsUseCase.execute();
-
-    return accounts;
+    return this.listAllAccountsUseCase.execute();
   }
 
   @Roles(UserType.User, UserType.Admin)
@@ -52,12 +48,8 @@ export class AccountController {
   async findByEmail(
     @Param('email') email: string,
     @UserId() userId: string,
-  ): Promise<Account | null> {
+  ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
-
-    if (!account || !account.isActive) {
-      throw new EntityNotFoundException('Account');
-    }
 
     if (account.id != userId) {
       throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
@@ -67,7 +59,7 @@ export class AccountController {
   }
 
   @Post()
-  async create(@Body() body: CreateAccountBody) {
+  async create(@Body() body: CreateAccountBody): Promise<Account> {
     const { name, email, password, confirmPassword } = body;
     if (password !== confirmPassword) {
       throw new PasswordDontMatchException();
@@ -76,19 +68,11 @@ export class AccountController {
     const saltOrRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltOrRounds);
 
-    try {
-      const account = await this.createAccountUseCase.execute({
-        name,
-        email,
-        password: hashedPassword,
-      });
-
-      return account;
-    } catch (err: any) {
-      if (err.code === 'P2002') {
-        throw new EmailInUseException();
-      }
-    }
+    return this.createAccountUseCase.execute({
+      name,
+      email,
+      password: hashedPassword,
+    });
   }
 
   @Roles(UserType.Admin, UserType.User)
@@ -99,21 +83,9 @@ export class AccountController {
     @Body() updateAccountBody: UpdateAccountBody,
   ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
-    if (!account || !account.isActive) {
-      throw new EntityNotFoundException('Account');
-    }
 
     if (account.id != userId) {
       throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
-    }
-
-    if (updateAccountBody.newEmail) {
-      const emailInUse = await this.findAccountByEmailUseCase.execute(
-        updateAccountBody.newEmail,
-      );
-      if (emailInUse) {
-        throw new EmailInUseException();
-      }
     }
 
     const saltOrRounds = 10;
@@ -138,9 +110,6 @@ export class AccountController {
     @UserId() userId: string,
   ): Promise<void> {
     const account = await this.findAccountByEmailUseCase.execute(email);
-    if (!account || !account.isActive) {
-      throw new EntityNotFoundException('Account');
-    }
 
     if (account.id != userId) {
       throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
