@@ -1,6 +1,7 @@
 import { InMemoryCartProductRepository } from '@test/repositories/in-memory-cart-products-repository';
 import { CartProduct } from '@application/entities/cart-product/cart-product';
 import { FindCartProductUseCase } from './find-cart-product-usecase';
+import { EntityNotFoundException } from '@infra/http/exceptions/entity-not-found-exception';
 
 describe('FindCartProductUSeCase', () => {
   it('should be able to find a cart product', async () => {
@@ -21,15 +22,14 @@ describe('FindCartProductUSeCase', () => {
     expect(foundCartProduct).toBe(cartProduct);
   });
 
-  it('should return null if no cart product is found', async () => {
+  it('should return throw if no cart product is found', async () => {
     const cartProductRepository = new InMemoryCartProductRepository();
     const findCartProduct = new FindCartProductUseCase(cartProductRepository);
 
-    const foundCartProduct = await findCartProduct.execute(
-      'fake_id',
-      'fake_id',
-    );
-
-    expect(foundCartProduct).toBeNull();
+    async () => {
+      expect(
+        await findCartProduct.execute('fake_id', 'fake_id'),
+      ).rejects.toThrow(EntityNotFoundException);
+    };
   });
 });
