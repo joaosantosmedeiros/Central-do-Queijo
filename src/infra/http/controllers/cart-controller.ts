@@ -54,11 +54,7 @@ export class CartController {
     @UserId() accountId: string,
   ): Promise<ReturnCartDto> {
     const cart = await this.createCartUseCase.execute(accountId);
-    const product = await this.findProductByIdUseCase.execute(body.productId);
-
-    if (!product) {
-      throw new EntityNotFoundException('Product');
-    }
+    await this.findProductByIdUseCase.execute(body.productId);
 
     await this.createCartProductUseCase.execute(body, cart);
     return new ReturnCartDto(cart);
@@ -70,15 +66,12 @@ export class CartController {
     @UserId() accountId: string,
   ): Promise<ReturnCartDto> {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
-    if (!cart) {
-      throw new EntityNotFoundException('Cart');
-    }
 
     const cartProduct = await this.findCartProductUseCase.execute(
       body.productId,
       cart.id,
     );
-    if (!cartProduct || !cart.cartProduct) {
+    if (!cart.cartProduct) {
       throw new EntityNotFoundException('CartProduct');
     }
 
@@ -96,10 +89,6 @@ export class CartController {
   async clearCart(@UserId() accountId: string) {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
 
-    if (!cart) {
-      throw new EntityNotFoundException('Cart');
-    }
-
     await this.clearCartUseCase.execute(cart);
   }
 
@@ -110,17 +99,11 @@ export class CartController {
     @Param('productId') productId: string,
   ) {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
-    if (!cart) {
-      throw new EntityNotFoundException('Cart');
-    }
 
     const cartProduct = await this.findCartProductUseCase.execute(
       productId,
       cart.id,
     );
-    if (!cartProduct) {
-      throw new EntityNotFoundException('CartProduct');
-    }
 
     await this.deleteCartProductUseCase.execute(cartProduct.productId, cart.id);
   }
