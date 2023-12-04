@@ -48,9 +48,6 @@ export class OrderController {
     @UserId() accountId: string,
   ): Promise<Order> {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
-    if (!cart) {
-      throw new EntityNotFoundException('Cart');
-    }
     if (!cart.cartProduct) {
       throw new EntityNotFoundException('CartProduct');
     }
