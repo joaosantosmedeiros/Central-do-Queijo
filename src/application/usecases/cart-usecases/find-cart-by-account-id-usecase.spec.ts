@@ -1,6 +1,7 @@
 import { InMemoryCartRepository } from '@test/repositories/in-memory-carts-repository';
 import { FindCartByAccountIdUseCase } from './find-cart-by-account-id-usecase';
 import { Cart } from '@application/entities/cart/cart';
+import { EntityNotFoundException } from '@infra/http/exceptions/entity-not-found-exception';
 
 describe('FindCartByAccountIdUseCase', () => {
   it('should be able to find an existing cart', async () => {
@@ -17,8 +18,10 @@ describe('FindCartByAccountIdUseCase', () => {
     const cartRepository = new InMemoryCartRepository();
     const findCartByAccountId = new FindCartByAccountIdUseCase(cartRepository);
 
-    const cart = await findCartByAccountId.execute('any_account_id');
-
-    expect(cart).toBeNull();
+    async () => {
+      expect(
+        await findCartByAccountId.execute('any_account_id'),
+      ).rejects.toThrow(EntityNotFoundException);
+    };
   });
 });
