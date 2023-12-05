@@ -45,7 +45,7 @@ export class CartController {
     @UserId() accountId: string,
   ): Promise<ReturnCartDto | null> {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
-    return cart ? new ReturnCartDto(cart) : null;
+    return new ReturnCartDto(cart);
   }
 
   @Post()
