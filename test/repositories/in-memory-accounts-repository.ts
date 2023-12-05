@@ -5,8 +5,12 @@ import { EmailInUseError } from '@application/usecases/errors/email-in-use-error
 export class InMemoryAccountRepository implements AccountRepository {
   public accounts: Account[] = [];
 
+  async findById(id: string): Promise<Account | null> {
+    return this.accounts.find((acc) => acc.id === id) || null;
+  }
+
   async findByEmail(email: string): Promise<Account | null> {
-    return this.accounts.filter((acc) => acc.email === email)[0] ?? null;
+    return this.accounts.find((acc) => acc.email === email) || null;
   }
 
   async list(): Promise<Account[]> {
