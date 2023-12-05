@@ -26,6 +26,7 @@ import { UpdateAccountBody } from '../dto/body/update-account-body';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 import { UserId } from '../decorators/user-id.decorator';
+import { FindAccountByIdUseCase } from '@application/usecases/account-usecases/find-account-by-id-usecase';
 
 @Controller('account')
 export class AccountController {
@@ -33,12 +34,13 @@ export class AccountController {
     private createAccountUseCase: CreateAccountUseCase,
     private listAllAccountsUseCase: ListAllAccountsUseCase,
     private findAccountByEmailUseCase: FindAccountByEmailUseCase,
+    private findAccountByIdUseCase: FindAccountByIdUseCase,
     private deleteAccountByEmailUseCase: DeleteAccountUseCase,
     private updateAccountUseCase: UpdateAccountUseCase,
   ) {}
 
   @Roles(UserType.Admin)
-  @Get()
+  @Get('/all')
   async listAll() {
     return this.listAllAccountsUseCase.execute();
   }
@@ -56,6 +58,12 @@ export class AccountController {
     }
 
     return account;
+  }
+
+  @Roles(UserType.Admin, UserType.User)
+  @Get()
+  async getAccountInfo(@UserId() accountId: string): Promise<Account> {
+    return this.findAccountByIdUseCase.execute(accountId);
   }
 
   @Post()

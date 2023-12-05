@@ -40,6 +40,7 @@ import { CreatePaymentUseCase } from '@application/usecases/payment-usecases/cre
 import { CreateOrderProductUseCase } from '@application/usecases/order-product-usecases/create-order-product-usecase';
 import { CreateOrderProductUsingCartUseCase } from '@application/usecases/order-product-usecases/create-order-product-using-cart';
 import { FindOrderByAccountUseCase } from '@application/usecases/order-usecases/find-order-by-account-usecase';
+import { FindAccountByIdUseCase } from '@application/usecases/account-usecases/find-account-by-id-usecase';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
@@ -54,6 +55,7 @@ import { FindOrderByAccountUseCase } from '@application/usecases/order-usecases/
     CreateAccountUseCase,
     ListAllAccountsUseCase,
     FindAccountByEmailUseCase,
+    FindAccountByIdUseCase,
     UpdateAccountUseCase,
     DeleteAccountUseCase,
 

@@ -8,6 +8,21 @@ import { Injectable } from '@nestjs/common';
 export class PrismaAccountRepository implements AccountRepository {
   constructor(private prismaService: PrismaService) {}
 
+  async findById(id: string): Promise<Account | null> {
+    const raw = await this.prismaService.account.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!raw) {
+      return null;
+    }
+
+    const account = PrismaAccountMapper.toDomain(raw);
+    return account;
+  }
+
   async findByEmail(email: string): Promise<Account | null> {
     const raw = await this.prismaService.account.findUnique({
       where: {
