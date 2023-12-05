@@ -26,7 +26,7 @@ import { UpdateAccountBody } from '../dto/body/update-account-body';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 import { UserId } from '../decorators/user-id.decorator';
-import { FindAccountByIdUseCase } from '@application/usecases/account-usecases/find-account-by-id-usecase';
+import { FindAccountByIdUseCase } from '@application/usecases/account-usecases';
 
 @Controller('account')
 export class AccountController {

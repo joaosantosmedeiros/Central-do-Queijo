@@ -28,19 +28,27 @@ import {
 } from '@application/usecases/product-usecases';
 import { AuthModule } from './auth/auth.module';
 import { CartController } from './controllers/cart-controller';
-import { CreateCartUseCase } from '@application/usecases/cart-usecases/create-cart-usecase';
-import { CreateCartProductUseCase } from '@application/usecases/cart-product-usecases/create-cart-product-usecase';
-import { FindCartByAccountIdUseCase } from '@application/usecases/cart-usecases/find-cart-by-account-id-usecase';
-import { ClearCartUseCase } from '@application/usecases/cart-usecases/clear-cart-usecase';
-import { DeleteCartProductUseCase } from '@application/usecases/cart-product-usecases/delete-cart-product-usecase';
-import { FindCartProductUseCase } from '@application/usecases/cart-product-usecases/find-cart-product-usecase';
-import { UpdateCartProductUseCase } from '@application/usecases/cart-product-usecases/update-cart-product-usecase';
 import { OrderController } from './controllers/order-controller';
-import { CreateOrderUseCase } from '@application/usecases/order-usecases/create-order-usecase';
 import { CreatePaymentUseCase } from '@application/usecases/payment-usecases/create-payment-usecase';
-import { CreateOrderProductUseCase } from '@application/usecases/order-product-usecases/create-order-product-usecase';
-import { CreateOrderProductUsingCartUseCase } from '@application/usecases/order-product-usecases/create-order-product-using-cart';
-import { FindOrderByAccountUseCase } from '@application/usecases/order-usecases/find-order-by-account-usecase';
+import {
+  ClearCartUseCase,
+  CreateCartUseCase,
+  FindCartByAccountIdUseCase,
+} from '@application/usecases/cart-usecases';
+import {
+  CreateCartProductUseCase,
+  DeleteCartProductUseCase,
+  FindCartProductUseCase,
+  UpdateCartProductUseCase,
+} from '@application/usecases/cart-product-usecases';
+import {
+  CreateOrderProductUseCase,
+  CreateOrderProductUsingCartUseCase,
+} from '@application/usecases/order-product-usecases';
+import {
+  CreateOrderUseCase,
+  FindOrderByAccountUseCase,
+} from '@application/usecases/order-usecases';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
