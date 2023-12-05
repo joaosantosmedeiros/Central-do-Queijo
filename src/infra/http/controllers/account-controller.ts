@@ -49,11 +49,11 @@ export class AccountController {
   @Get(':email')
   async findByEmail(
     @Param('email') email: string,
-    @UserId() userId: string,
+    @UserId() accountId: string,
   ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
-    if (account.id != userId) {
+    if (account.id != accountId) {
       throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
     }
 
@@ -87,12 +87,12 @@ export class AccountController {
   @Put(':email')
   async update(
     @Param('email') email: string,
-    @UserId() userId: string,
+    @UserId() accountId: string,
     @Body() updateAccountBody: UpdateAccountBody,
   ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
-    if (account.id != userId) {
+    if (account.id != accountId) {
       throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
     }
 
@@ -115,11 +115,11 @@ export class AccountController {
   @HttpCode(204)
   async delete(
     @Param('email') email: string,
-    @UserId() userId: string,
+    @UserId() accountId: string,
   ): Promise<void> {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
-    if (account.id != userId) {
+    if (account.id != accountId) {
       throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
     }
 
