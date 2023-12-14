@@ -1,3 +1,4 @@
+import { Category } from '../category/category';
 import { Product } from './product';
 
 describe('Product', () => {
@@ -7,6 +8,7 @@ describe('Product', () => {
       categoryId: 'any_id',
       image: 'any_image',
       price: 1,
+      category: new Category({ name: 'any_category' }),
     });
     expect(product).toBeTruthy();
   });
@@ -17,6 +19,7 @@ describe('Product', () => {
       categoryId: 'any_id',
       price: 1,
       image: 'any_image',
+      category: new Category({ name: 'any_category' }),
     });
 
     expect(product.updatedAt).toEqual(product.createdAt);

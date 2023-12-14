@@ -7,7 +7,7 @@ export interface ProductProps {
   price: number;
   image: string;
   categoryId: string;
-  category?: Category;
+  category: Category;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -54,6 +54,10 @@ export class Product {
   public set image(image: string) {
     this.props.image = image;
     this.props.updatedAt = new Date();
+  }
+
+  public get category() {
+    return this.props.category;
   }
 
   public get categoryId() {
