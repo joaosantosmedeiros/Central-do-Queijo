@@ -12,6 +12,7 @@ export class PrismaProductRepository implements ProductRepository {
   async findById(id: string): Promise<Product | null> {
     const raw = await this.prismaService.product.findUnique({
       where: { id },
+      include: { category: true },
     });
 
     return raw ? PrismaProductMapper.toDomain(raw) : null;
@@ -20,18 +21,31 @@ export class PrismaProductRepository implements ProductRepository {
   async findByName(name: string): Promise<Product | null> {
     const raw = await this.prismaService.product.findFirst({
       where: { name },
+      include: { category: true },
     });
 
     return raw ? PrismaProductMapper.toDomain(raw) : null;
   }
 
-  async list(productsId?: string[]): Promise<Product[]> {
+  async list(
+    productsId?: string[],
+    withRelations?: boolean,
+  ): Promise<Product[]> {
     let findOptions = {};
 
     if (productsId && productsId.length > 0) {
       findOptions = {
         where: {
           id: { in: productsId },
+        },
+      };
+    }
+
+    if (withRelations) {
+      findOptions = {
+        ...findOptions,
+        include: {
+          category: true,
         },
       };
     }
@@ -54,6 +68,7 @@ export class PrismaProductRepository implements ProductRepository {
     const raw = await this.prismaService.product.update({
       where: { id },
       data: props,
+      include: { category: true },
     });
 
     return PrismaProductMapper.toDomain(raw);
