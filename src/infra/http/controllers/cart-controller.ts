@@ -25,7 +25,7 @@ import { FindProductByIdUseCase } from '@application/usecases/product-usecases';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 import { SaveCartBody } from '../dto/body/save-cart-body';
-import { UserId } from '../decorators/user-id.decorator';
+import { AccountId } from '../decorators/account-id.decorator';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 import { ReturnCartDto } from '../dto/return/return-cart-dto';
 
@@ -46,7 +46,7 @@ export class CartController {
   @UsePipes(ValidationPipe)
   @Get()
   async findCartByAccountId(
-    @UserId() accountId: string,
+    @AccountId() accountId: string,
   ): Promise<ReturnCartDto | null> {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
     return new ReturnCartDto(cart);
@@ -55,7 +55,7 @@ export class CartController {
   @Post()
   async createCart(
     @Body() body: SaveCartBody,
-    @UserId() accountId: string,
+    @AccountId() accountId: string,
   ): Promise<ReturnCartDto> {
     const cart = await this.createCartUseCase.execute(accountId);
     await this.findProductByIdUseCase.execute(body.productId);
@@ -67,7 +67,7 @@ export class CartController {
   @Put()
   async updateProductInCart(
     @Body() body: SaveCartBody,
-    @UserId() accountId: string,
+    @AccountId() accountId: string,
   ): Promise<ReturnCartDto> {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
 
@@ -90,7 +90,7 @@ export class CartController {
 
   @Delete()
   @HttpCode(204)
-  async clearCart(@UserId() accountId: string) {
+  async clearCart(@AccountId() accountId: string) {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
 
     await this.clearCartUseCase.execute(cart);
@@ -99,7 +99,7 @@ export class CartController {
   @Delete('product/:productId')
   @HttpCode(204)
   async deleteProductInCart(
-    @UserId() accountId: string,
+    @AccountId() accountId: string,
     @Param('productId') productId: string,
   ) {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);

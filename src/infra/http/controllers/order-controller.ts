@@ -16,7 +16,7 @@ import {
   FindCartByAccountIdUseCase,
 } from '@application/usecases/cart-usecases';
 import { CreateOrderBody } from '../dto/body/create-order-body';
-import { UserId } from '../decorators/user-id.decorator';
+import { AccountId } from '../decorators/account-id.decorator';
 import { CreatePaymentUseCase } from '@application/usecases/payment-usecases/create-payment-usecase';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
 import { Order } from '@application/entities/order/order';
@@ -39,7 +39,7 @@ export class OrderController {
   ) {}
 
   @Get()
-  async list(@UserId() accountId: string): Promise<ReturnOrderDto[]> {
+  async list(@AccountId() accountId: string): Promise<ReturnOrderDto[]> {
     const orders = await this.findOrdersByAccountUseCase.execute(accountId);
 
     return orders.map((order) => new ReturnOrderDto(order));
@@ -49,7 +49,7 @@ export class OrderController {
   @UsePipes(ValidationPipe)
   async create(
     @Body() body: CreateOrderBody,
-    @UserId() accountId: string,
+    @AccountId() accountId: string,
   ): Promise<Order> {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
     if (!cart.cartProduct) {

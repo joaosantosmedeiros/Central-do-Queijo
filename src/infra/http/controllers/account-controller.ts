@@ -25,7 +25,7 @@ import { Account } from '@application/entities/account/account';
 import { UpdateAccountBody } from '../dto/body/update-account-body';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
-import { UserId } from '../decorators/user-id.decorator';
+import { AccountId } from '../decorators/account-id.decorator';
 import { FindAccountByIdUseCase } from '@application/usecases/account-usecases';
 
 @Controller('account')
@@ -49,7 +49,7 @@ export class AccountController {
   @Get(':email')
   async findByEmail(
     @Param('email') email: string,
-    @UserId() accountId: string,
+    @AccountId() accountId: string,
   ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
@@ -62,7 +62,7 @@ export class AccountController {
 
   @Roles(UserType.Admin, UserType.User)
   @Get()
-  async getAccountInfo(@UserId() accountId: string): Promise<Account> {
+  async getAccountInfo(@AccountId() accountId: string): Promise<Account> {
     return this.findAccountByIdUseCase.execute(accountId);
   }
 
@@ -87,7 +87,7 @@ export class AccountController {
   @Put(':email')
   async update(
     @Param('email') email: string,
-    @UserId() accountId: string,
+    @AccountId() accountId: string,
     @Body() updateAccountBody: UpdateAccountBody,
   ): Promise<Account> {
     const account = await this.findAccountByEmailUseCase.execute(email);
@@ -115,7 +115,7 @@ export class AccountController {
   @HttpCode(204)
   async delete(
     @Param('email') email: string,
-    @UserId() accountId: string,
+    @AccountId() accountId: string,
   ): Promise<void> {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
