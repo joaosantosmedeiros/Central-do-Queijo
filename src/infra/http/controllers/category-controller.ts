@@ -1,4 +1,3 @@
-import { Category } from '@application/entities/category/category';
 import {
   Body,
   Controller,
@@ -20,6 +19,7 @@ import {
 import { CategoryInUseException } from '../exceptions/category-in-use-exception';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
+import { ReturnCategoryDto } from '../dto/return/return-category-dto';
 
 @Controller('category')
 export class CategoryController {
@@ -32,19 +32,24 @@ export class CategoryController {
   ) {}
 
   @Get()
-  async listAll(): Promise<Category[]> {
-    return this.listAllCategoriesUseCase.execute();
+  async listAll(): Promise<ReturnCategoryDto[]> {
+    const categories = await this.listAllCategoriesUseCase.execute();
+    return categories.map((category) => new ReturnCategoryDto(category));
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string): Promise<Category> {
-    return this.findCategoryByIdUseCase.execute(id);
+  async findById(@Param('id') id: string): Promise<ReturnCategoryDto> {
+    return new ReturnCategoryDto(
+      await this.findCategoryByIdUseCase.execute(id),
+    );
   }
 
   @Roles(UserType.Admin)
   @Post()
-  async create(@Body() body: CreateCategoryBody): Promise<Category> {
-    return this.createCategoryUseCase.execute(body);
+  async create(@Body() body: CreateCategoryBody): Promise<ReturnCategoryDto> {
+    return new ReturnCategoryDto(
+      await this.createCategoryUseCase.execute(body),
+    );
   }
 
   @Roles(UserType.Admin)
@@ -52,13 +57,15 @@ export class CategoryController {
   async update(
     @Param('id') id: string,
     @Body() body: CreateCategoryBody,
-  ): Promise<Category> {
+  ): Promise<ReturnCategoryDto> {
     await this.findCategoryByIdUseCase.execute(id);
 
-    return this.updateCategoryUseCase.execute({
-      id,
-      name: body.name,
-    });
+    return new ReturnCategoryDto(
+      await this.updateCategoryUseCase.execute({
+        id,
+        name: body.name,
+      }),
+    );
   }
 
   @Roles(UserType.Admin)
