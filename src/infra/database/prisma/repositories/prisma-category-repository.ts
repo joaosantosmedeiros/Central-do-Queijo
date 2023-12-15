@@ -26,7 +26,9 @@ export class PrismaCategoryRepository implements CategoryRepository {
   }
 
   async list(): Promise<Category[]> {
-    const categories = await this.prismaService.category.findMany({});
+    const categories = await this.prismaService.category.findMany({
+      include: { _count: { select: { Product: true } } },
+    });
 
     return categories.map((category) =>
       PrismaCategoryMapper.toDomain(category),

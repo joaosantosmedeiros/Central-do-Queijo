@@ -1,7 +1,5 @@
 import { Category } from '@application/entities/category/category';
 
-import { Category as RawCategory } from '@prisma/client';
-
 export class PrismaCategoryMapper {
   static toPrisma(category: Category) {
     return {
@@ -10,12 +8,13 @@ export class PrismaCategoryMapper {
     };
   }
 
-  static toDomain(raw: RawCategory) {
+  static toDomain(raw: any) {
     return new Category(
       {
         name: raw.name,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
+        _count: raw._count,
       },
       raw.id,
     );

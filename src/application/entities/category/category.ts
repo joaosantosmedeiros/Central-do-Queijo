@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 
 export interface CategoryProps {
   name: string;
+  _count?: { Product: number };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,6 +19,7 @@ export class Category {
     this._id = id ?? randomUUID();
     this.props = {
       ...props,
+      _count: props._count ?? undefined,
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
     };
@@ -33,6 +35,10 @@ export class Category {
   public set name(name: string) {
     this.props.name = name;
     this.props.updatedAt = new Date();
+  }
+
+  public get count() {
+    return this.props._count;
   }
 
   public get createdAt() {
