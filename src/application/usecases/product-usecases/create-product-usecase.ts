@@ -2,6 +2,7 @@ import { Product } from '@application/entities/product/product';
 import { ProductRepository } from '@application/repositories/product-repository';
 import { Injectable } from '@nestjs/common';
 import { FindCategoryByIdUseCase } from '../category-usecases';
+import { Category } from '@application/entities/category/category';
 
 export interface CreateProductRequest {
   name: string;
@@ -27,6 +28,7 @@ export class CreateProductUseCase {
       categoryId,
       image,
       price,
+      category: new Category({ name: 'any_category' }),
     });
 
     await this.productRepository.create(product);
