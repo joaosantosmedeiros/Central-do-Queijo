@@ -1,3 +1,4 @@
+import { Category } from '@application/entities/category/category';
 import { Product } from '@application/entities/product/product';
 
 export function makeProduct(
@@ -8,9 +9,10 @@ export function makeProduct(
   image = 'any_image',
   createdAt = new Date(),
   updatedAt = new Date(),
+  category = new Category({ name: 'any_category' }, 'any_category_id'),
 ) {
   return new Product(
-    { name, categoryId, createdAt, updatedAt, price, image },
+    { name, categoryId, createdAt, updatedAt, price, image, category },
     id,
   );
 }

@@ -21,9 +21,7 @@ export class PrismaProductMapper {
         image: raw.image,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
-        category: raw.category
-          ? PrismaCategoryMapper.toDomain(raw.category)
-          : undefined,
+        category: PrismaCategoryMapper.toDomain(raw.category),
       },
       raw.id,
     );
