@@ -33,7 +33,7 @@ export class ProductController {
 
   @Get()
   async list(): Promise<ReturnProductDto[]> {
-    const products = await this.listProductsUseCase.execute();
+    const products = await this.listProductsUseCase.execute([], true);
     return products.map((product) => new ReturnProductDto(product));
   }
 
