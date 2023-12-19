@@ -9,6 +9,7 @@ import {
 import {
   CreateOrderUseCase,
   FindOrderByAccountUseCase,
+  ListOrdersUseCase,
 } from '@application/usecases/order-usecases';
 import { CreateOrderProductUsingCartUseCase } from '@application/usecases/order-product-usecases';
 import {
@@ -25,7 +26,6 @@ import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 import { ReturnOrderDto } from '../dto/return/return-order-dto';
 
-@Roles(UserType.User)
 @Controller('order')
 export class OrderController {
   constructor(
@@ -36,15 +36,26 @@ export class OrderController {
     private readonly listProductsUseCase: ListProductsUseCase,
     private readonly clearCartUseCase: ClearCartUseCase,
     private readonly findOrdersByAccountUseCase: FindOrderByAccountUseCase,
+    private readonly listOrdersUseCase: ListOrdersUseCase,
   ) {}
 
+  @Roles(UserType.User)
   @Get()
-  async list(@AccountId() accountId: string): Promise<ReturnOrderDto[]> {
+  async findOrdersByAccount(
+    @AccountId() accountId: string,
+  ): Promise<ReturnOrderDto[]> {
     const orders = await this.findOrdersByAccountUseCase.execute(accountId);
 
     return orders.map((order) => new ReturnOrderDto(order));
   }
 
+  @Roles(UserType.Admin)
+  @Get('all')
+  async list(): Promise<Order[]> {
+    return this.listOrdersUseCase.execute();
+  }
+
+  @Roles(UserType.User)
   @Post('cart')
   @UsePipes(ValidationPipe)
   async create(

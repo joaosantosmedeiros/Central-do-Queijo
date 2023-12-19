@@ -48,6 +48,7 @@ import {
 import {
   CreateOrderUseCase,
   FindOrderByAccountUseCase,
+  ListOrdersUseCase,
 } from '@application/usecases/order-usecases';
 
 @Module({
@@ -93,6 +94,7 @@ import {
     CreateOrderProductUseCase,
     CreateOrderProductUsingCartUseCase,
     FindOrderByAccountUseCase,
+    ListOrdersUseCase,
   ],
 })
 export class HttpModule {}
