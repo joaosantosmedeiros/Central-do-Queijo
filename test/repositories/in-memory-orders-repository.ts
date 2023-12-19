@@ -8,6 +8,10 @@ export class InMemoryOrdersRepository implements OrderRepository {
     return this.orders.filter((order) => order.accountId == accountId);
   }
 
+  async list(): Promise<Order[]> {
+    return this.orders;
+  }
+
   async create(order: Order): Promise<Order> {
     this.orders.push(order);
     return order;
