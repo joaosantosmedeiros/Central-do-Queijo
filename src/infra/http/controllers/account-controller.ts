@@ -21,12 +21,12 @@ import * as bcrypt from 'bcrypt';
 
 import { CreateAccountBody } from '../dto/body/create-account-body';
 import { PasswordDontMatchException } from '../exceptions/password-dont-match-exception';
-import { Account } from '@application/entities/account/account';
 import { UpdateAccountBody } from '../dto/body/update-account-body';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 import { AccountId } from '../decorators/account-id.decorator';
 import { FindAccountByIdUseCase } from '@application/usecases/account-usecases';
+import { ReturnAccountDto } from '../dto/return/return-account-dto';
 
 @Controller('account')
 export class AccountController {
@@ -41,8 +41,10 @@ export class AccountController {
 
   @Roles(UserType.Admin)
   @Get('/all')
-  async listAll() {
-    return this.listAllAccountsUseCase.execute();
+  async listAll(): Promise<ReturnAccountDto[]> {
+    return (await this.listAllAccountsUseCase.execute()).map(
+      (account) => new ReturnAccountDto(account),
+    );
   }
 
   @Roles(UserType.User, UserType.Admin)
@@ -50,24 +52,28 @@ export class AccountController {
   async findByEmail(
     @Param('email') email: string,
     @AccountId() accountId: string,
-  ): Promise<Account> {
+  ): Promise<ReturnAccountDto> {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
     if (account.id != accountId) {
       throw new HttpException('Restricted', HttpStatus.FORBIDDEN);
     }
 
-    return account;
+    return new ReturnAccountDto(account);
   }
 
   @Roles(UserType.Admin, UserType.User)
   @Get()
-  async getAccountInfo(@AccountId() accountId: string): Promise<Account> {
-    return this.findAccountByIdUseCase.execute(accountId);
+  async getAccountInfo(
+    @AccountId() accountId: string,
+  ): Promise<ReturnAccountDto> {
+    return new ReturnAccountDto(
+      await this.findAccountByIdUseCase.execute(accountId),
+    );
   }
 
   @Post()
-  async create(@Body() body: CreateAccountBody): Promise<Account> {
+  async create(@Body() body: CreateAccountBody): Promise<ReturnAccountDto> {
     const { name, email, password, confirmPassword } = body;
     if (password !== confirmPassword) {
       throw new PasswordDontMatchException();
@@ -76,11 +82,13 @@ export class AccountController {
     const saltOrRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltOrRounds);
 
-    return this.createAccountUseCase.execute({
+    const account = await this.createAccountUseCase.execute({
       name,
       email,
       password: hashedPassword,
     });
+
+    return new ReturnAccountDto(account);
   }
 
   @Roles(UserType.Admin, UserType.User)
@@ -89,7 +97,7 @@ export class AccountController {
     @Param('email') email: string,
     @AccountId() accountId: string,
     @Body() updateAccountBody: UpdateAccountBody,
-  ): Promise<Account> {
+  ): Promise<ReturnAccountDto> {
     const account = await this.findAccountByEmailUseCase.execute(email);
 
     if (account.id != accountId) {
@@ -98,7 +106,7 @@ export class AccountController {
 
     const saltOrRounds = 10;
 
-    return this.updateAccountUseCase.execute({
+    const updatedAccount = await this.updateAccountUseCase.execute({
       email,
       props: {
         newEmail: updateAccountBody.newEmail,
@@ -108,6 +116,8 @@ export class AccountController {
           : undefined,
       },
     });
+
+    return new ReturnAccountDto(updatedAccount);
   }
 
   @Roles(UserType.Admin, UserType.User)
