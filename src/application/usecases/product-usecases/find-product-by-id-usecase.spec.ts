@@ -3,7 +3,7 @@ import { InMemoryProductsRepository } from '@test/repositories/in-memory-product
 import { FindProductByIdUseCase } from './find-product-by-id-usecase';
 import { EntityNotFoundException } from '@infra/http/exceptions/entity-not-found-exception';
 
-describe('Find Product By Id', () => {
+describe('FindProductById', () => {
   it('should find an existing product', async () => {
     const productRepository = new InMemoryProductsRepository();
     const findProductById = new FindProductByIdUseCase(productRepository);
@@ -11,7 +11,7 @@ describe('Find Product By Id', () => {
     await productRepository.create(makeProduct());
     await productRepository.create(makeProduct());
 
-    const products = await productRepository.list();
+    const products = productRepository.products;
     const product = await findProductById.execute(products[1].id);
 
     expect(product).toEqual(products[1]);
