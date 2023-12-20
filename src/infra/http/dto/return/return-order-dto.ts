@@ -1,9 +1,12 @@
 import { Order } from '@application/entities/order/order';
 import { ReturnOrderProductDto } from './return-order-product-dto';
+import { ReturnAccountDto } from './return-account-dto';
+import { Account } from '@application/entities/account/account';
 
 export class ReturnOrderDto {
   id: string;
   accountId: string;
+  account?: ReturnAccountDto;
   date: Date;
   paymentId: string;
   OrderProduct?: ReturnOrderProductDto[];
@@ -17,6 +20,9 @@ export class ReturnOrderDto {
       ? order.OrderProduct.map(
           (orderProduct) => new ReturnOrderProductDto(orderProduct),
         )
+      : undefined;
+    this.account = order.account
+      ? new ReturnAccountDto(new Account(order.account))
       : undefined;
   }
 }
