@@ -51,8 +51,10 @@ export class OrderController {
 
   @Roles(UserType.Admin)
   @Get('all')
-  async list(): Promise<Order[]> {
-    return this.listOrdersUseCase.execute();
+  async list(): Promise<ReturnOrderDto[]> {
+    return (await this.listOrdersUseCase.execute()).map(
+      (order) => new ReturnOrderDto(order),
+    );
   }
 
   @Roles(UserType.User)

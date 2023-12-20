@@ -27,7 +27,9 @@ export class PrismaOrderRepository implements OrderRepository {
   }
 
   async list(): Promise<Order[]> {
-    const orders = await this.prismaService.order.findMany({});
+    const orders = await this.prismaService.order.findMany({
+      include: { account: true },
+    });
     return orders.map((rawOrder) => new Order(rawOrder));
   }
 
