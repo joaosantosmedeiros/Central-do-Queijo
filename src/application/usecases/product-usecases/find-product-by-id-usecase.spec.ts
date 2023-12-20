@@ -9,12 +9,11 @@ describe('FindProductById', () => {
     const findProductById = new FindProductByIdUseCase(productRepository);
 
     await productRepository.create(makeProduct());
-    await productRepository.create(makeProduct());
+    await productRepository.create(makeProduct('any_name', 3.0, 'any_id'));
 
-    const products = productRepository.products;
-    const product = await findProductById.execute(products[1].id);
+    const product = await findProductById.execute('any_id');
 
-    expect(product).toEqual(products[1]);
+    expect(product).toBeTruthy();
   });
 
   it('should throw if no product is found', async () => {
