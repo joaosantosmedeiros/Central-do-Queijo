@@ -5,14 +5,16 @@ export class ReturnProductDto {
   id: string;
   name: string;
   categoryId: string;
-  category: ReturnCategoryDto;
+  category?: ReturnCategoryDto;
   price: number;
   image: string;
   constructor(product: Product) {
     this.id = product.id;
     this.name = product.name;
     this.categoryId = product.categoryId;
-    this.category = new ReturnCategoryDto(product.category);
+    this.category = product.category
+      ? new ReturnCategoryDto(product.category)
+      : undefined;
     this.price = product.price;
     this.image = product.image;
   }
