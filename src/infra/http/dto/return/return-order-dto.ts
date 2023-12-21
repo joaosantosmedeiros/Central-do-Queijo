@@ -22,7 +22,17 @@ export class ReturnOrderDto {
         )
       : undefined;
     this.account = order.account
-      ? new ReturnAccountDto(new Account(order.account))
+      ? new ReturnAccountDto(
+          new Account({
+            email: order.account.email,
+            name: order.account.name,
+            password: order.account.password,
+            isActive: order.account.isActive,
+            userType: order.account.userType,
+            createdAt: order.account.createdAt,
+            updatedAt: order.account.updatedAt,
+          }),
+        )
       : undefined;
   }
 }
