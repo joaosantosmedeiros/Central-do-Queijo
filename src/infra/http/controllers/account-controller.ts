@@ -41,7 +41,7 @@ export class AccountController {
 
   @Roles(UserType.Admin)
   @Get('/all')
-  async listAll(): Promise<ReturnAccountDto[]> {
+  async list(): Promise<ReturnAccountDto[]> {
     return (await this.listAllAccountsUseCase.execute()).map(
       (account) => new ReturnAccountDto(account),
     );

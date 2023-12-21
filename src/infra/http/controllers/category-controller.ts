@@ -32,7 +32,7 @@ export class CategoryController {
   ) {}
 
   @Get()
-  async listAll(): Promise<ReturnCategoryDto[]> {
+  async list(): Promise<ReturnCategoryDto[]> {
     const categories = await this.listAllCategoriesUseCase.execute();
     return categories.map((category) => new ReturnCategoryDto(category));
   }
