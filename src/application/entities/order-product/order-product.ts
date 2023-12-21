@@ -27,7 +27,7 @@ export class OrderProduct {
       ...props,
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
-      product: props.product ? new Product(props.product) : undefined,
+      product: props.product ?? undefined,
     };
   }
 
