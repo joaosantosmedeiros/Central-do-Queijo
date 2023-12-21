@@ -1,7 +1,7 @@
 import { Order } from '@application/entities/order/order';
 import { ReturnOrderProductDto } from './return-order-product-dto';
 import { ReturnAccountDto } from './return-account-dto';
-import { Account } from '@application/entities/account/account';
+import { ReturnPaymentDto } from './return-payment-dto';
 
 export class ReturnOrderDto {
   id: string;
@@ -9,6 +9,7 @@ export class ReturnOrderDto {
   account?: ReturnAccountDto;
   date: Date;
   paymentId: string;
+  payment?: ReturnPaymentDto;
   OrderProduct?: ReturnOrderProductDto[];
 
   constructor(order: Order) {
@@ -22,17 +23,10 @@ export class ReturnOrderDto {
         )
       : undefined;
     this.account = order.account
-      ? new ReturnAccountDto(
-          new Account({
-            email: order.account.email,
-            name: order.account.name,
-            password: order.account.password,
-            isActive: order.account.isActive,
-            userType: order.account.userType,
-            createdAt: order.account.createdAt,
-            updatedAt: order.account.updatedAt,
-          }),
-        )
+      ? new ReturnAccountDto(order.account)
+      : undefined;
+    this.payment = order.payment
+      ? new ReturnPaymentDto(order.payment)
       : undefined;
   }
 }
