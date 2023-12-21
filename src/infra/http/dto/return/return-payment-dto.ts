@@ -1,13 +1,18 @@
 export class ReturnPaymentDto {
   id: string;
-  name: string;
-  categoryId: string;
+  code: string;
+  paymentDate?: Date;
+  status: string;
   price: number;
-  image: string;
-  constructor(product: any) {
-    this.id = product.id;
-    this.name = product.name;
-    this.price = product.price;
-    this.image = product.image;
+  finalPrice: number;
+  discount: number;
+  constructor(payment: any) {
+    this.id = payment.id;
+    this.code = payment.code;
+    this.paymentDate = payment.paymentDate;
+    this.status = payment.status;
+    this.price = payment.price;
+    this.finalPrice = payment.finalPrice;
+    this.discount = payment.discount;
   }
 }
