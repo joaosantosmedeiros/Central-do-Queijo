@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   UsePipes,
   ValidationPipe,
@@ -9,6 +10,7 @@ import {
 import {
   CreateOrderUseCase,
   FindOrderByAccountUseCase,
+  FindOrderByIdUseCase,
   ListOrdersUseCase,
 } from '@application/usecases/order-usecases';
 import { CreateOrderProductUsingCartUseCase } from '@application/usecases/order-product-usecases';
@@ -37,6 +39,7 @@ export class OrderController {
     private readonly clearCartUseCase: ClearCartUseCase,
     private readonly findOrdersByAccountUseCase: FindOrderByAccountUseCase,
     private readonly listOrdersUseCase: ListOrdersUseCase,
+    private readonly findOrderByIdUseCase: FindOrderByIdUseCase,
   ) {}
 
   @Roles(UserType.User)
@@ -55,6 +58,12 @@ export class OrderController {
     return (await this.listOrdersUseCase.execute()).map(
       (order) => new ReturnOrderDto(order),
     );
+  }
+
+  @Roles(UserType.Admin)
+  @Get(':orderId')
+  async findById(@Param('orderId') orderId: string): Promise<any> {
+    return new ReturnOrderDto(await this.findOrderByIdUseCase.execute(orderId));
   }
 
   @Roles(UserType.User)

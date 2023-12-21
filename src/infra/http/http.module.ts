@@ -48,6 +48,7 @@ import {
 import {
   CreateOrderUseCase,
   FindOrderByAccountUseCase,
+  FindOrderByIdUseCase,
   ListOrdersUseCase,
 } from '@application/usecases/order-usecases';
 
@@ -94,6 +95,7 @@ import {
     CreateOrderProductUseCase,
     CreateOrderProductUsingCartUseCase,
     FindOrderByAccountUseCase,
+    FindOrderByIdUseCase,
     ListOrdersUseCase,
   ],
 })

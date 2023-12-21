@@ -8,6 +8,25 @@ import { PrismaOrderMapper } from '../mappers/prisma-order-mapper';
 export class PrismaOrderRepository implements OrderRepository {
   constructor(private prismaService: PrismaService) {}
 
+  async findOrderById(orderId: string): Promise<Order | null> {
+    const order = await this.prismaService.order.findUnique({
+      where: {
+        id: orderId,
+      },
+      include: {
+        OrderProduct: {
+          include: {
+            product: true,
+          },
+        },
+        payment: true,
+        account: true,
+      },
+    });
+
+    return PrismaOrderMapper.toDomain(order);
+  }
+
   async findOrdersByAccountId(accountId: string): Promise<Order[]> {
     const rawOrders = await this.prismaService.order.findMany({
       where: {
@@ -30,7 +49,7 @@ export class PrismaOrderRepository implements OrderRepository {
     const orders = await this.prismaService.order.findMany({
       include: { account: true },
     });
-    return orders.map((rawOrder) => new Order(rawOrder));
+    return orders.map((rawOrder) => PrismaOrderMapper.toDomain(rawOrder));
   }
 
   async create(order: Order): Promise<Order> {
