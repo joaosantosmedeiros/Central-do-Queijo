@@ -1,8 +1,8 @@
 import { Replace } from '@helpers/replace';
 import { randomUUID } from 'crypto';
 import { OrderProduct } from '../order-product/order-product';
-import { Account as RawAccount } from '@prisma/client';
 import { Account } from '../account/account';
+import { Payment } from '../payment/payment';
 
 export interface OrderProps {
   accountId: string;
@@ -11,7 +11,8 @@ export interface OrderProps {
   createdAt: Date;
   updatedAt: Date;
   OrderProduct?: OrderProduct[];
-  account?: RawAccount;
+  payment?: Payment;
+  account?: Account;
 }
 
 export class Order {
@@ -30,8 +31,9 @@ export class Order {
       ...props,
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
-      date: new Date(),
-      account: props.account ? new Account(props.account) : undefined,
+      date: props.date ?? new Date(),
+      account: props.account ?? undefined,
+      payment: props.payment ?? undefined,
     };
   }
 
@@ -53,6 +55,10 @@ export class Order {
 
   public get paymentId() {
     return this.props.paymentId;
+  }
+
+  public get payment() {
+    return this.props.payment;
   }
 
   public get OrderProduct() {
