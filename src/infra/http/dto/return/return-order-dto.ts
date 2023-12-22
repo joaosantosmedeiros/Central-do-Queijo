@@ -10,6 +10,7 @@ export class ReturnOrderDto {
   date: Date;
   paymentId: string;
   payment?: ReturnPaymentDto;
+  productAmount?: number;
   OrderProduct?: ReturnOrderProductDto[];
 
   constructor(order: Order) {
@@ -17,6 +18,7 @@ export class ReturnOrderDto {
     this.accountId = order.accountId;
     this.date = order.date;
     this.paymentId = order.paymentId;
+    this.productAmount = order.productsAmount ?? undefined;
     this.OrderProduct = order.OrderProduct
       ? order.OrderProduct.map(
           (orderProduct) => new ReturnOrderProductDto(orderProduct),

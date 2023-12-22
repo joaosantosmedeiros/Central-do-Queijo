@@ -20,6 +20,7 @@ export class PrismaOrderMapper {
         date: raw.date,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
+        productsAmount: raw._count ? raw._count.OrderProduct : undefined,
         OrderProduct: raw.OrderProduct
           ? raw.OrderProduct.map(
               (op) =>

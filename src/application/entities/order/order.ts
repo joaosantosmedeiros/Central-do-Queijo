@@ -13,6 +13,7 @@ export interface OrderProps {
   OrderProduct?: OrderProduct[];
   payment?: Payment;
   account?: Account;
+  productsAmount?: number;
 }
 
 export class Order {
@@ -32,8 +33,6 @@ export class Order {
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
       date: props.date ?? new Date(),
-      account: props.account ?? undefined,
-      payment: props.payment ?? undefined,
     };
   }
 
@@ -59,6 +58,10 @@ export class Order {
 
   public get payment() {
     return this.props.payment;
+  }
+
+  public get productsAmount() {
+    return this.props.productsAmount;
   }
 
   public get OrderProduct() {
