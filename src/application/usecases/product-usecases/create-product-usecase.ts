@@ -28,11 +28,8 @@ export class CreateProductUseCase {
       categoryId,
       image,
       price,
-      category: new Category({ name: 'any_category' }),
     });
 
-    await this.productRepository.create(product);
-
-    return product;
+    return this.productRepository.create(product);
   }
 }

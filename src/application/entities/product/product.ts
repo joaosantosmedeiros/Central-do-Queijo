@@ -7,7 +7,7 @@ export interface ProductProps {
   price: number;
   image: string;
   categoryId: string;
-  category: Category;
+  category?: Category;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,7 +17,10 @@ export class Product {
   private props: ProductProps;
 
   constructor(
-    props: Replace<ProductProps, { createdAt?: Date; updatedAt?: Date }>,
+    props: Replace<
+      ProductProps,
+      { createdAt?: Date; updatedAt?: Date; category?: Category }
+    >,
     id?: string,
   ) {
     this._id = id ?? randomUUID();

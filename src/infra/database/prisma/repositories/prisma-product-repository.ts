@@ -7,7 +7,6 @@ import { PrismaProductMapper } from '../mappers/prisma-product-mapper';
 @Injectable()
 export class PrismaProductRepository implements ProductRepository {
   constructor(private prismaService: PrismaService) {}
-  public products: Product[];
 
   async findById(id: string): Promise<Product | null> {
     const raw = await this.prismaService.product.findUnique({
@@ -55,10 +54,13 @@ export class PrismaProductRepository implements ProductRepository {
     return products.map((product) => PrismaProductMapper.toDomain(product));
   }
 
-  async create(product: Product): Promise<void> {
-    await this.prismaService.product.create({
+  async create(product: Product): Promise<Product> {
+    const createdProduct = await this.prismaService.product.create({
       data: PrismaProductMapper.toPrisma(product),
+      include: { category: true },
     });
+
+    return PrismaProductMapper.toDomain(createdProduct);
   }
 
   async update(

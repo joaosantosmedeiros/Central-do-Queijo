@@ -7,7 +7,7 @@ export abstract class ProductRepository {
     productsId?: string[],
     isWithRelations?: boolean,
   ): Promise<Product[]>;
-  abstract create(product: Product): Promise<void>;
+  abstract create(product: Product): Promise<Product>;
   abstract update(
     id: string,
     props: {
