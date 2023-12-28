@@ -3,6 +3,11 @@ import { Product } from '@application/entities/product/product';
 export abstract class ProductRepository {
   abstract findById(id: string): Promise<Product | null>;
   abstract findByName(name: string): Promise<Product | null>;
+  abstract findByNameContaining(
+    search: string,
+    size: number,
+    page: number,
+  ): Promise<[Product[], number]>;
   abstract list(
     productsId?: string[],
     isWithRelations?: boolean,
