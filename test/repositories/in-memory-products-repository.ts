@@ -14,6 +14,22 @@ export class InMemoryProductsRepository implements ProductRepository {
     return product ?? null;
   }
 
+  async findByNameContaining(
+    search: string,
+    size: number,
+    page: number,
+  ): Promise<[Product[], number]> {
+    const products = this.products.filter((product) =>
+      product.name.includes(search),
+    );
+
+    const start = size * (page - 1);
+    const end = size * page;
+    const pagedProducts = products.slice(start, end);
+
+    return [pagedProducts, products.length];
+  }
+
   async list(): Promise<Product[]> {
     return this.products;
   }
