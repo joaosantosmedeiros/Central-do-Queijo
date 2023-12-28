@@ -7,11 +7,13 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import {
   CreateProductUseCase,
   DeleteProductUseCase,
   FindProductByIdUseCase,
+  FindProductByNameContainingUseCase,
   ListProductsUseCase,
   UpdateProductUseCase,
 } from '@application/usecases/product-usecases';
@@ -20,6 +22,8 @@ import { UpdateProductBody } from '../dto/body/update-product-body';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 import { ReturnProductDto } from '../dto/return/return-product-dto';
+import { PaginationDto } from '../dto/others/pagination-dto';
+import { Product } from '@application/entities/product/product';
 
 @Controller('product')
 export class ProductController {
@@ -27,6 +31,7 @@ export class ProductController {
     private createProductUseCase: CreateProductUseCase,
     private listProductsUseCase: ListProductsUseCase,
     private findProductByIdUseCase: FindProductByIdUseCase,
+    private findProductByNameContainig: FindProductByNameContainingUseCase,
     private deleteProductIdUseCase: DeleteProductUseCase,
     private updateProductUseCase: UpdateProductUseCase,
   ) {}
@@ -35,6 +40,15 @@ export class ProductController {
   async list(): Promise<ReturnProductDto[]> {
     const products = await this.listProductsUseCase.execute([], true);
     return products.map((product) => new ReturnProductDto(product));
+  }
+
+  @Get('page')
+  async findPaged(
+    @Query('search') search: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+  ): Promise<PaginationDto<Product[]>> {
+    return this.findProductByNameContainig.execute(search, size, page);
   }
 
   @Get(':id')

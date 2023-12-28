@@ -23,6 +23,7 @@ import {
   CreateProductUseCase,
   DeleteProductUseCase,
   FindProductByIdUseCase,
+  FindProductByNameContainingUseCase,
   ListProductsUseCase,
   UpdateProductUseCase,
 } from '@application/usecases/product-usecases';
@@ -79,6 +80,7 @@ import {
     CreateProductUseCase,
     ListProductsUseCase,
     FindProductByIdUseCase,
+    FindProductByNameContainingUseCase,
     UpdateProductUseCase,
     DeleteProductUseCase,
 

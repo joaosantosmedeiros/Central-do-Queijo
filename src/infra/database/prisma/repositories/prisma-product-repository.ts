@@ -26,6 +26,41 @@ export class PrismaProductRepository implements ProductRepository {
     return raw ? PrismaProductMapper.toDomain(raw) : null;
   }
 
+  async findByNameContaining(
+    search: string,
+    size: number,
+    page: number,
+  ): Promise<[Product[], number]> {
+    const skip = (page - 1) * size;
+
+    const [products, count] = await this.prismaService.$transaction([
+      this.prismaService.product.findMany({
+        where: {
+          name: { contains: search, mode: 'insensitive' },
+        },
+        include: {
+          category: {
+            include: { _count: { select: { Product: true } } },
+          },
+        },
+        take: Number(size),
+        skip,
+        orderBy: { name: 'asc' },
+      }),
+      this.prismaService.product.count({
+        where: {
+          name: { contains: search, mode: 'insensitive' },
+        },
+        orderBy: { name: 'asc' },
+      }),
+    ]);
+
+    return [
+      products.map((product) => PrismaProductMapper.toDomain(product)),
+      count,
+    ];
+  }
+
   async list(
     productsId?: string[],
     withRelations?: boolean,
