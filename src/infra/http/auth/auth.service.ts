@@ -13,9 +13,14 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   async login(loginDto: LoginDto): Promise<ReturnLoginDto> {
-    const account = await this.findAccountByEmailUseCase.execute(
-      loginDto.email,
-    );
+    const account = await this.findAccountByEmailUseCase
+      .execute(loginDto.email)
+      .catch(() => {
+        throw new HttpException(
+          'Invalid mail or password',
+          HttpStatus.FORBIDDEN,
+        );
+      });
 
     const passwordMatches = await bcrypt.compare(
       loginDto.password,
