@@ -24,7 +24,7 @@ export class PrismaOrderRepository implements OrderRepository {
       },
     });
 
-    return PrismaOrderMapper.toDomain(order);
+    return order ? PrismaOrderMapper.toDomain(order) : null;
   }
 
   async findOrdersByAccountId(accountId: string): Promise<Order[]> {
