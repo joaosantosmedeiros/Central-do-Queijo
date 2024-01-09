@@ -22,7 +22,7 @@ import { UpdateProductBody } from '../dto/body/update-product-body';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 import { ReturnProductDto } from '../dto/return/return-product-dto';
-import { PaginationDto } from '../dto/others/pagination-dto';
+import { PaginationDto } from '../dto/pagination-dto';
 import { Product } from '@application/entities/product/product';
 
 @Controller('product')

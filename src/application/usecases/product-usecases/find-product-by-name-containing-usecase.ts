@@ -1,9 +1,6 @@
 import { Product } from '@application/entities/product/product';
 import { ProductRepository } from '@application/repositories/product-repository';
-import {
-  PaginationDto,
-  PaginationMeta,
-} from '@infra/http/dto/others/pagination-dto';
+import { PaginationDto, PaginationMeta } from '@infra/http/dto/pagination-dto';
 import { Injectable } from '@nestjs/common';
 
 const DEFAULT_PAGE_SIZE = 10;
