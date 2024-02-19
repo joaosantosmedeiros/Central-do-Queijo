@@ -37,14 +37,12 @@ describe('UpdateCartProductUseCase', () => {
       ),
     );
 
-    async () => {
-      expect(
-        await updateCartProductUseCase.execute({
-          amount: 0,
-          cartProductId: 'any_id',
-        }),
-      ).rejects.toThrow(BadRequestException);
-    };
+    await expect(
+      updateCartProductUseCase.execute({
+        amount: 0,
+        cartProductId: 'any_id',
+      }),
+    ).rejects.toThrow(BadRequestException);
   });
 
   it('should throw an error if an invalid product is passed', async () => {

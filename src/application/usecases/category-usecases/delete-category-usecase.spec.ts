@@ -18,8 +18,6 @@ describe('DeleteCategoryUseCase', () => {
     const categoryRepository = new InMemoryCategoryRepository();
     const deleteCategory = new DeleteCategoryUseCase(categoryRepository);
 
-    expect(async () => await deleteCategory.execute('fake_id')).rejects.toThrow(
-      Error,
-    );
+    await expect(deleteCategory.execute('fake_id')).rejects.toThrow(Error);
   });
 });

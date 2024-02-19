@@ -26,10 +26,8 @@ describe('FindCartProductUSeCase', () => {
     const cartProductRepository = new InMemoryCartProductRepository();
     const findCartProduct = new FindCartProductUseCase(cartProductRepository);
 
-    async () => {
-      expect(
-        await findCartProduct.execute('fake_id', 'fake_id'),
-      ).rejects.toThrow(EntityNotFoundException);
-    };
+    await expect(findCartProduct.execute('fake_id', 'fake_id')).rejects.toThrow(
+      EntityNotFoundException,
+    );
   });
 });

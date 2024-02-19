@@ -5,6 +5,7 @@ import { Cart } from '@application/entities/cart/cart';
 import { CartProduct } from '@application/entities/cart-product/cart-product';
 import { Product } from '@application/entities/product/product';
 import { makeProduct } from '@test/factories/product-factory';
+import { HttpException } from '@nestjs/common';
 
 describe('CreateOrderProductUsingCartUseCase', () => {
   it('should create order products correctly', async () => {
@@ -52,5 +53,25 @@ describe('CreateOrderProductUsingCartUseCase', () => {
     expect(orderProduct2.price).toBe(2);
     expect(orderProduct2.amount).toBe(12);
     expect(orderProduct2.productId).toBe('2');
+  });
+
+  it('should throw if no products are inserted on the cart', async () => {
+    const repository = new InMemoryOrderProductsRepository();
+    const createOrderProduct = new CreateOrderProductUseCase(repository);
+    const createOrderProductUsingCart = new CreateOrderProductUsingCartUseCase(
+      createOrderProduct,
+    );
+
+    const cart = new Cart(
+      {
+        accountId: 'any_id',
+        cartProduct: [],
+      },
+      'any_cart_id',
+    );
+
+    await expect(
+      createOrderProductUsingCart.execute(cart, 'any_order_id', []),
+    ).rejects.toThrow(HttpException);
   });
 });

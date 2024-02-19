@@ -20,10 +20,8 @@ describe('FindAccountByEmailUseCase', () => {
     const accountRepository = new InMemoryAccountRepository();
     const findAccountById = new FindAccountByIdUseCase(accountRepository);
 
-    async () => {
-      expect(await findAccountById.execute('fake_id')).rejects.toThrow(
-        EntityNotFoundException,
-      );
-    };
+    await expect(findAccountById.execute('fake_id')).rejects.toThrow(
+      EntityNotFoundException,
+    );
   });
 });

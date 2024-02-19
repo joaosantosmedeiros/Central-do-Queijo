@@ -146,10 +146,8 @@ describe('CreatePaymentUsecase', () => {
       'cart_id',
     );
 
-    async () => {
-      expect(
-        await createPaymentUseCase.execute({ code, discount }, products, cart),
-      ).rejects.toThrow();
-    };
+    await expect(
+      createPaymentUseCase.execute({ code, discount }, products, cart),
+    ).rejects.toThrow();
   });
 });

@@ -25,10 +25,8 @@ describe('FindOrderByIdUseCase', () => {
     const orderRepository = new InMemoryOrdersRepository();
     const findOrderById = new FindOrderByIdUseCase(orderRepository);
 
-    async () => {
-      expect(await findOrderById.execute('fake_id')).rejects.toThrow(
-        EntityNotFoundException,
-      );
-    };
+    await expect(findOrderById.execute('fake_id')).rejects.toThrow(
+      EntityNotFoundException,
+    );
   });
 });

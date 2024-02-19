@@ -18,10 +18,8 @@ describe('FindCartByAccountIdUseCase', () => {
     const cartRepository = new InMemoryCartRepository();
     const findCartByAccountId = new FindCartByAccountIdUseCase(cartRepository);
 
-    async () => {
-      expect(
-        await findCartByAccountId.execute('any_account_id'),
-      ).rejects.toThrow(EntityNotFoundException);
-    };
+    await expect(findCartByAccountId.execute('any_account_id')).rejects.toThrow(
+      EntityNotFoundException,
+    );
   });
 });

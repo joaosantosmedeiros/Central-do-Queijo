@@ -20,10 +20,8 @@ describe('FindProductById', () => {
     const productRepository = new InMemoryProductsRepository();
     const findProductById = new FindProductByIdUseCase(productRepository);
 
-    async () => {
-      expect(await findProductById.execute('fake_id')).rejects.toThrow(
-        EntityNotFoundException,
-      );
-    };
+    await expect(findProductById.execute('fake_id')).rejects.toThrow(
+      EntityNotFoundException,
+    );
   });
 });

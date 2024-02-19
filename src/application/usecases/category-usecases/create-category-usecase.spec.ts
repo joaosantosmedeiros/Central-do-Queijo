@@ -30,10 +30,10 @@ describe('Create Category Use Case', () => {
       name: 'any_name',
     });
 
-    expect(async () => {
-      await createCategory.execute({
+    await expect(
+      createCategory.execute({
         name: 'any_name',
-      });
-    }).rejects.toThrow(CategoryAlreadyExistsException);
+      }),
+    ).rejects.toThrow(CategoryAlreadyExistsException);
   });
 });

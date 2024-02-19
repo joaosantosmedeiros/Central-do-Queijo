@@ -21,10 +21,8 @@ describe('FindCategoryById', () => {
     const categoryRepository = new InMemoryCategoryRepository();
     const findCategoryById = new FindCategoryByIdUseCase(categoryRepository);
 
-    async () => {
-      expect(await findCategoryById.execute('fake_id')).rejects.toThrow(
-        EntityNotFoundException,
-      );
-    };
+    await expect(findCategoryById.execute('fake_id')).rejects.toThrow(
+      EntityNotFoundException,
+    );
   });
 });

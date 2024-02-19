@@ -34,12 +34,11 @@ describe('UpdateCategoryUseCase', () => {
   it('should not update an unexistent category', async () => {
     const { updateCategory } = makeSut();
 
-    expect(
-      async () =>
-        await updateCategory.execute({
-          id: 'fake_id',
-          name: 'any_name',
-        }),
+    await expect(
+      updateCategory.execute({
+        id: 'fake_id',
+        name: 'any_name',
+      }),
     ).rejects.toThrow();
   });
 
@@ -51,12 +50,11 @@ describe('UpdateCategoryUseCase', () => {
 
     const category = categoryRepository.categories[0];
 
-    expect(
-      async () =>
-        await updateCategory.execute({
-          id: category.id,
-          name: 'another_category',
-        }),
+    await expect(
+      updateCategory.execute({
+        id: category.id,
+        name: 'another_category',
+      }),
     ).rejects.toThrow(CategoryAlreadyExistsException);
   });
 });
