@@ -23,7 +23,6 @@ import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
 import { ReturnProductDto } from '../dto/return/return-product-dto';
 import { PaginationDto } from '../dto/pagination-dto';
-import { Product } from '@application/entities/product/product';
 
 @Controller('product')
 export class ProductController {
@@ -39,7 +38,11 @@ export class ProductController {
   @Get()
   async list(): Promise<ReturnProductDto[]> {
     const products = await this.listProductsUseCase.execute([], true);
-    return products.map((product) => new ReturnProductDto(product));
+    return products.map((product) => {
+      const dto = new ReturnProductDto(product);
+      dto.category = undefined;
+      return dto;
+    });
   }
 
   @Get('page')
@@ -47,21 +50,25 @@ export class ProductController {
     @Query('search') search: string,
     @Query('size') size: number,
     @Query('page') page: number,
-  ): Promise<PaginationDto<Product[]>> {
+  ): Promise<PaginationDto<ReturnProductDto[]>> {
     return this.findProductByNameContainig.execute(search, size, page);
   }
 
   @Get(':id')
   async findById(@Param('id') id: string): Promise<ReturnProductDto> {
     const product = await this.findProductByIdUseCase.execute(id);
-    return new ReturnProductDto(product);
+    const dto = new ReturnProductDto(product);
+    dto.category = undefined;
+    return dto;
   }
 
   @Roles(UserType.Admin)
   @Post()
   async create(@Body() body: CreateProductBody): Promise<ReturnProductDto> {
     const product = await this.createProductUseCase.execute(body);
-    return new ReturnProductDto(product);
+    const dto = new ReturnProductDto(product);
+    dto.category = undefined;
+    return dto;
   }
 
   @Roles(UserType.Admin)
@@ -80,7 +87,9 @@ export class ProductController {
       price: body.price,
     });
 
-    return new ReturnProductDto(product);
+    const dto = new ReturnProductDto(product);
+    dto.category = undefined;
+    return dto;
   }
 
   @Roles(UserType.Admin)

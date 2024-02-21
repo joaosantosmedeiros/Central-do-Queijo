@@ -1,6 +1,7 @@
 import { InMemoryProductsRepository } from '@test/repositories/in-memory-products-repository';
 import { FindProductByNameContainingUseCase } from './find-product-by-name-containing-usecase';
 import { makeProduct } from '@test/factories/product-factory';
+import { ReturnProductDto } from '@infra/http/dto/return/return-product-dto';
 
 describe('FindProductByNameContainingUseCase', () => {
   it('should search correctly with only one page', async () => {
@@ -40,8 +41,8 @@ describe('FindProductByNameContainingUseCase', () => {
     expect(products.meta.totalItems).toBe(9);
     expect(products.meta.totalPages).toBe(5);
     expect(products.data).toEqual([
-      productRepository.products[0],
-      productRepository.products[1],
+      new ReturnProductDto(productRepository.products[0]),
+      new ReturnProductDto(productRepository.products[1]),
     ]);
   });
 
@@ -63,8 +64,8 @@ describe('FindProductByNameContainingUseCase', () => {
     expect(products.meta.totalItems).toBe(9);
     expect(products.meta.totalPages).toBe(5);
     expect(products.data).toEqual([
-      productRepository.products[4],
-      productRepository.products[5],
+      new ReturnProductDto(productRepository.products[4]),
+      new ReturnProductDto(productRepository.products[5]),
     ]);
   });
 });

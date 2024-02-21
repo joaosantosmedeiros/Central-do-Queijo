@@ -1,6 +1,6 @@
-import { Product } from '@application/entities/product/product';
 import { ProductRepository } from '@application/repositories/product-repository';
 import { PaginationDto, PaginationMeta } from '@infra/http/dto/pagination-dto';
+import { ReturnProductDto } from '@infra/http/dto/return/return-product-dto';
 import { Injectable } from '@nestjs/common';
 
 const DEFAULT_PAGE_SIZE = 10;
@@ -14,7 +14,7 @@ export class FindProductByNameContainingUseCase {
     search: string,
     size = DEFAULT_PAGE_SIZE,
     page = FIRST_PAGE,
-  ): Promise<PaginationDto<Product[]>> {
+  ): Promise<PaginationDto<ReturnProductDto[]>> {
     const [products, count] = await this.productRepository.findByNameContaining(
       search,
       size,
@@ -28,7 +28,7 @@ export class FindProductByNameContainingUseCase {
         Number(page),
         Math.ceil(count / size),
       ),
-      products,
+      products.map((product) => new ReturnProductDto(product)),
     );
   }
 }
