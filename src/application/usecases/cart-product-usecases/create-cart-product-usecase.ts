@@ -1,7 +1,7 @@
 import { CartProduct } from '@application/entities/cart-product/cart-product';
 import { Cart } from '@application/entities/cart/cart';
 import { CartProductRepository } from '@application/repositories/cart-product-repository';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 export interface CreateCartProductRequest {
   productId: string;
@@ -20,6 +20,10 @@ export class CreateCartProductUseCase {
       request.productId,
       cart.id,
     );
+
+    if (request.amount === 0) {
+      throw new BadRequestException('Amount must be positive');
+    }
 
     if (!cartProduct) {
       return this.cartProductRepository.create(
