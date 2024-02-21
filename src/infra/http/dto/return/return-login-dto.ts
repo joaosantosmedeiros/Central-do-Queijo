@@ -1,6 +1,6 @@
-import { Account } from '@application/entities/account/account';
+import { ReturnAccountDto } from './return-account-dto';
 
 export interface ReturnLoginDto {
-  account: Account;
+  account: ReturnAccountDto;
   accessToken: string;
 }

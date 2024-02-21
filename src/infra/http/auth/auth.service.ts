@@ -5,6 +5,7 @@ import { LoginPayload } from '@infra/http/dto/return/return-login-payload';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { ReturnAccountDto } from '../dto/return/return-account-dto';
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
 
     return {
       accessToken: this.jwtService.sign({ ...new LoginPayload(account) }),
-      account,
+      account: new ReturnAccountDto(account),
     };
   }
 }
