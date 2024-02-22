@@ -22,7 +22,6 @@ import { CreateOrderBody } from '../dto/body/create-order-body';
 import { AccountId } from '../decorators/account-id.decorator';
 import { CreatePaymentUseCase } from '@application/usecases/payment-usecases/create-payment-usecase';
 import { EntityNotFoundException } from '../exceptions/entity-not-found-exception';
-import { Order } from '@application/entities/order/order';
 import { ListProductsUseCase } from '@application/usecases/product-usecases';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from 'src/enums/user-type.enum';
@@ -72,7 +71,7 @@ export class OrderController {
   async create(
     @Body() body: CreateOrderBody,
     @AccountId() accountId: string,
-  ): Promise<Order> {
+  ): Promise<ReturnOrderDto> {
     const cart = await this.findCartByAccountIdUseCase.execute(accountId);
     if (!cart.cartProduct) {
       throw new EntityNotFoundException('CartProduct');
@@ -106,6 +105,6 @@ export class OrderController {
 
     await this.clearCartUseCase.execute(cart);
 
-    return order;
+    return new ReturnOrderDto(order);
   }
 }
