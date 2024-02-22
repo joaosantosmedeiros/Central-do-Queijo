@@ -1,0 +1,1433 @@
+openapi: 3.0.3
+info:
+  title: CT_nest
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: http://localhost:3000
+paths:
+  /account:
+    get:
+      tags:
+        - accounts
+      summary: find account by token
+      description: find account by token
+      operationId: findAccountByToken
+      responses:
+        '200':
+          description: 'Sucessfull search'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+    post:
+      tags:
+        - accounts
+      summary: create account
+      description: create account
+      operationId: createAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'username'
+                email:
+                  type: string
+                  example: 'email@mail.com'
+                password:
+                  type: string
+                  example: 'password'
+                confirmPassword:
+                  type: string
+                  example: 'password'
+      responses:
+        '200':
+          description: 'Account created successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          description: 'Email is in use.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: 'Email already in use'
+  /account/{email}:
+    get:
+      tags:
+        - accounts
+      summary: find account by email
+      description: find account by email
+      operationId: findAccountByEmail
+      responses:
+        '200':
+          description: 'Search successfull'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '403':
+          description: Searched account is not the same as the request account
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: Restricted
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Account not found
+    put:
+      tags:
+        - accounts
+      summary: update account by email
+      description: update account by email
+      operationId: updateAccountByEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newEmail:
+                  type: string
+                  example: mail@mail.com
+                newName:
+                  type: string
+                  example: new name
+                newPassword:
+                  type: string
+                  example: new passsword
+      responses:
+        '200':
+          description: 'Successfull update'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          description: 'Email is in use.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: 'Email already in use'
+        '403':
+          description: 'User does not have access to the account'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+    delete:
+      tags:
+        - accounts
+      summary: delete account by email
+      description: delete account by email
+      operationId: deleteAccountByEmail
+      responses:
+        '204':
+          description: 'Success'
+        '403':
+          description: Searched account is not the same as the request account
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: Restricted
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Account not found
+    parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ''
+  /account/all:
+    get:
+      tags:
+        - accounts
+      summary: list accounts
+      description: list accounts
+      operationId: listAccounts
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '403':
+          description: 'Only admins can access'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+  /category:
+    get:
+      tags:
+        - categories
+      summary: list categories
+      description: list categories
+      operationId: listCategories
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+    post:
+      tags:
+        - categories
+      summary: create category
+      description: create category
+      operationId: createCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'category name'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: 'Category name already in use'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: 'Category already exists.'
+        '403':
+          description: 'Only admins can access'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+  /category/{id}:
+    get:
+      tags:
+        - categories
+      summary: find category by id
+      description: find category by id
+      operationId: findCategoryById
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Category not found
+    put:
+      tags:
+        - categories
+      summary: update category by id
+      description: update category by id
+      operationId: updateCategoryById
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'new category name'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: 'Category name already in use'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: 'Category already exists.'
+        '403':
+          description: 'Only admins can update categories'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Category not found
+    delete:
+      tags:
+        - categories
+      summary: delete category by id
+      description: delete category by id
+      operationId: deleteCategoryById
+      responses:
+        '204':
+          description: 'Success'
+        '403':
+          description: 'Only admins can delete categories'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Category not found
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ''
+  /product:
+    get:
+      tags:
+        - products
+      summary: list products
+      description: list products
+      operationId: listProducts
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      tags:
+        - products
+      summary: create product
+      description: create product
+      operationId: createProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                  example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                image:
+                  type: string
+                  example: 'image url'
+                name:
+                  type: string
+                  example: 'product name'
+                price:
+                  type: number
+                  example: 1
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          description: 'Only admins can create products'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+        '404':
+          description: 'Category not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: 'Category not found'
+  /product/{id}:
+    get:
+      tags:
+        - products
+      summary: find product by id
+      description: find product by id
+      operationId: findProductById
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: 'Product not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: 'Product not found'
+    put:
+      tags:
+        - products
+      summary: update product by id
+      description: update product by id
+      operationId: updateProductById
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                  example: 'new category id'
+                image:
+                  type: string
+                  example: 'new image url'
+                name:
+                  type: string
+                  example: 'new name'
+                price:
+                  type: number
+                  example: 999.99
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          description: 'Only admins can update products'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+        '404':
+          description: Category or Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Product not found
+    delete:
+      tags:
+        - products
+      summary: delete product by id
+      description: delete product by id
+      operationId: deleteProductById
+      responses:
+        '204':
+          description: 'Success'
+          content:
+        '403':
+          description: 'Only admins can delete products'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Product not found
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ''
+  /product/page:
+    get:
+      tags:
+        - products
+      summary: find product paged
+      description: find product paged
+      operationId: findProductPaged
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+            example: ''
+        - name: size
+          in: query
+          schema:
+            type: string
+            example: ''
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: ''
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      itemsPerPage:
+                        type: integer
+                        example: 10
+                      totalItems:
+                        type: integer
+                        example: 2
+                      currentPage:
+                        type: integer
+                        example: 1
+                      totalPages:
+                        type: integer
+                        example: 1
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                        name:
+                          type: string
+                          example: 'product name'
+                        categoryId:
+                          type: string
+                          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                        category:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                            name:
+                              type: string
+                              example: 'category name'
+                            count:
+                              type: number
+                              example: 2
+                        price:
+                          type: number
+                          example: 999
+                        image:
+                          type: string
+                          example: 'image url'
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: login
+      description: login
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: mail@mail.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: 'ey.....'
+                  account:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 'xxxxxxx-xxxxx-xxxx...'
+                      name:
+                        type: string
+                        example: 'username'
+                      email:
+                        type: string
+                        example: 'mail@mail.com'
+        '403':
+          description: 'Invalid credentials'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: 'Invalid mail or password'
+  /cart:
+    get:
+      tags:
+        - cart
+      summary: find cart by account id
+      description: find cart by account id
+      operationId: findCartByAccountId
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Cart not found
+        '403':
+          description: 'User is not logged in'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+    put:
+      tags:
+        - cart
+      summary: update cart product
+      description: update cart product
+      operationId: updateCartProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  example: 0
+                productId:
+                  type: string
+                  example: ''
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '400':
+          description: 'Amount must be positive'
+          content:
+            applciation/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Amount must be positive'
+                  error:
+                    type: string
+                    example: 'Bad Reqeust'
+                  statusCode:
+                    type: integer
+                    example: 400
+        '404':
+          description: CartProduct not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: CartProduct not found
+        '403':
+          description: 'User is not logged in'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+    post:
+      tags:
+        - cart
+      summary: create
+      description: create
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  example: 1
+                productId:
+                  type: string
+                  example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            applciation/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        '400':
+          description: 'Amount must be positive'
+          content:
+            applciation/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: array
+                    items:
+                      type: string
+                      example: 'Amount must be positive'
+                  error:
+                    type: string
+                    example: 'Bad Reqeust'
+                  statusCode:
+                    type: integer
+                    example: 400
+        '403':
+          description: 'User is not logged in'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+        '404':
+          description: 'Product not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: 'Product not found'
+    delete:
+      tags:
+        - cart
+      summary: delete cart
+      description: delete cart
+      operationId: deleteCart
+      responses:
+        '204':
+          description: 'Success'
+        '403':
+          description: 'User is not logged in'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+        '404':
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Cart not found
+  /cart/product/{productId}:
+    delete:
+      tags:
+        - cart
+      summary: delete cart product
+      description: delete item from cart
+      operationId: deleteCartProduct
+      responses:
+        '204':
+          description: 'Success'
+        '404':
+          description: Cart or CartProduct not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: CartProduct not found
+        '403':
+          description: 'User is not logged in'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ''
+  /order:
+    get:
+      tags:
+        - order
+      summary: find order by account id
+      description: find order by account id
+      operationId: findOrderByAccountId
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                    accountId:
+                      type: string
+                      example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                    date:
+                      type: string
+                      example: '2024-02-21T13:13:58.562Z'
+                    paymentId:
+                      type: string
+                      example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                    OrderProduct:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrderProduct'
+                    payment:
+                      $ref: '#/components/schemas/Payment'
+        '403':
+          description: 'User is not logged in'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+  /order/cart:
+    post:
+      tags:
+        - order
+      summary: create order
+      description: create order
+      operationId: createOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: any_code
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '403':
+          description: 'User is not logged in'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+        '404':
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Cart not found
+  /order/all:
+    get:
+      tags:
+        - order
+      summary: list orders
+      description: list orders
+      operationId: listOrders
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                    accountId:
+                      type: string
+                      example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                    date:
+                      type: string
+                      example: '2024-02-21T13:15:45.572Z'
+                    paymentId:
+                      type: string
+                      example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                    productAmount:
+                      type: integer
+                      example: 2
+                    account:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                        name:
+                          type: string
+                          example: 'username'
+                        email:
+                          type: string
+                          example: 'mail@mail.com'
+        '403':
+          description: 'User is not admin'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+  /order/{orderId}:
+    get:
+      tags:
+        - order
+      summary: find order by id
+      description: find order by id
+      operationId: findOrderById
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                  accountId:
+                    type: string
+                    example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                  date:
+                    type: string
+                    example: '2024-02-21T13:13:58.562Z'
+                  paymentId:
+                    type: string
+                    example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                  OrderProduct:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderProduct'
+                  account:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                      name:
+                        type: string
+                        example: 'username'
+                      email:
+                        type: string
+                        example: 'mail@mail.com'
+                  payment:
+                    $ref: '#/components/schemas/Payment'
+        '403':
+          description: 'User is not admin'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden resource
+                  error:
+                    type: string
+                    example: Forbidden
+                  statusCode:
+                    type: integer
+                    example: 403
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Order not found
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: xxxx-xxxx-xxxx-xxxx-xxxxx
+tags:
+  - name: accounts
+  - name: categories
+  - name: products
+  - name: auth
+  - name: cart
+  - name: order
+
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        name:
+          type: string
+          example: 'username'
+        email:
+          type: string
+          example: 'mail@mail.com'
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        name:
+          type: string
+          example: 'category name'
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        name:
+          type: string
+          example: 'product name'
+        categoryId:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        price:
+          type: number
+          example: 1
+        image:
+          type: string
+          example: 'image url'
+    CartProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        cartId:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        productId:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        amount:
+          type: integer
+          example: 10
+        product:
+          $ref: '#/components/schemas/Product'
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        cartProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartProduct'
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        accountId:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        date:
+          type: string
+          example: '2024-02-21T13:15:45.572Z'
+        paymentId:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+    OrderProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        productId:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        orderId:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        amount:
+          type: integer
+          example: 1
+        price:
+          type: number
+          example: 9.99
+        product:
+          $ref: '#/components/schemas/Product'
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        code:
+          type: string
+          example: 'any_code'
+        paymentDate:
+          type: string
+          example: '2024-02-21T13:15:45.572Z'
+        status:
+          type: string
+          example: 'PENDING'
+        price:
+          type: number
+          example: 99.9
+        finalPrice:
+          type: number
+          example: 99.9
+        discount:
+          type: number
+          example: 5
